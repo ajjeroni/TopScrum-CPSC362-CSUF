@@ -9,7 +9,7 @@ public class Card {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructor
+    // Full constructor: 6 inputs
     public Card(UUID id, String frontText, String backText, String hint,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
@@ -18,6 +18,37 @@ public class Card {
         this.hint = hint;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    // Constructor: 5 inputs (auto updatedAt)
+    public Card(UUID id, String frontText, String backText, String hint,
+                LocalDateTime createdAt) {
+        this.id = id;
+        this.frontText = frontText;
+        this.backText = backText;
+        this.hint = hint;
+        this.createdAt = createdAt;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // Constructor: 3 inputs (front/back only)
+    public Card(String frontText, String backText) {
+        this.id = UUID.randomUUID();
+        this.frontText = frontText;
+        this.backText = backText;
+        this.hint = "";
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // Constructor: 4 inputs (front/back + hint)
+    public Card(String frontText, String backText, String hint) {
+        this.id = UUID.randomUUID();
+        this.frontText = frontText;
+        this.backText = backText;
+        this.hint = hint;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     // Getters

@@ -5,12 +5,35 @@ public class Folder {
     private UUID id;
     private String name;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;  // add this field
 
-    // Constructor
+    // Full constructor: 4 inputs
+    public Folder(UUID id, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    // Constructor: 3 inputs (auto updatedAt)
     public Folder(UUID id, String name, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
+    }
+
+    // Constructor: 2 inputs (id + name, auto createdAt)
+    public Folder(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // Constructor: 1 input (name only)
+    public Folder(String name) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.createdAt = LocalDateTime.now();
     }
 
     // Getters

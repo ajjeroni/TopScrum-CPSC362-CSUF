@@ -175,6 +175,11 @@ public class MainApp extends Application {
                 reviewStatus.setText("Review ended.");
                 currentAttempt = null;
                 reviewButton.setText("Review Attempt");
+
+                // Clear the message after 5 seconds
+                javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(5));
+                pause.setOnFinished(ev -> reviewStatus.setText(""));
+                pause.play();
             }
         });
 
@@ -207,7 +212,7 @@ public class MainApp extends Application {
 
         // Prevent shrinking below button size
         primaryStage.setMinWidth(250);
-        primaryStage.setMinHeight(350);
+        primaryStage.setMinHeight(400);
         
         // --- Apply initial style and max size ---
         // --- Initial button style tied to column width ---

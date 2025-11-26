@@ -1,37 +1,57 @@
 import java.util.UUID;
 import java.time.LocalDateTime;
+import java.net.InetAddress;
 
 public class Device {
     private UUID id;
     private String platform;
     private LocalDateTime lastSeenAt;
 
-    // Full constructor: 3 inputs (id, platform, lastSeenAt)
+    // Full constructor
     public Device(UUID id, String platform, LocalDateTime lastSeenAt) {
         this.id = id;
         this.platform = platform;
         this.lastSeenAt = lastSeenAt;
     }
 
-    // Constructor: 2 inputs (auto id, platform, lastSeenAt provided)
+    // Constructor: auto id
     public Device(String platform, LocalDateTime lastSeenAt) {
         this.id = UUID.randomUUID();
         this.platform = platform;
         this.lastSeenAt = lastSeenAt;
     }
 
-    // Constructor: 2 inputs (id provided, auto lastSeenAt)
+    // Constructor: auto lastSeenAt
     public Device(UUID id, String platform) {
         this.id = id;
         this.platform = platform;
         this.lastSeenAt = LocalDateTime.now();
     }
 
-    // Constructor: 1 input (auto id + auto lastSeenAt, platform provided)
+    // Constructor: auto id + auto lastSeenAt
     public Device(String platform) {
         this.id = UUID.randomUUID();
         this.platform = platform;
         this.lastSeenAt = LocalDateTime.now();
+    }
+
+    // NEW: No-arg constructor that auto-detects platform
+    public Device() {
+        this.id = UUID.randomUUID();
+        this.platform = detectPlatform();
+        this.lastSeenAt = LocalDateTime.now();
+    }
+
+    private String detectPlatform() {
+        try {
+            String os = System.getProperty("os.name");
+            String version = System.getProperty("os.version");
+            String arch = System.getProperty("os.arch");
+            String host = InetAddress.getLocalHost().getHostName();
+            return host + " - " + os + " " + version + " (" + arch + ")";
+        } catch (Exception e) {
+            return System.getProperty("os.name") + " " + System.getProperty("os.version");
+        }
     }
 
     // Getters
@@ -43,7 +63,6 @@ public class Device {
     public void setPlatform(String platform) { this.platform = platform; }
     public void setLastSeenAt(LocalDateTime lastSeenAt) { this.lastSeenAt = lastSeenAt; }
 
-    // Example behavior: update lastSeenAt to current time
     public void updateLastSeen() {
         this.lastSeenAt = LocalDateTime.now();
     }

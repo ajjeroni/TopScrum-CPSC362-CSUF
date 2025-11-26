@@ -3,13 +3,23 @@ import java.nio.file.*;
 import java.io.*;
 
 public class LocalRepository {
-    // Just store generic key/value pairs for simplicity
     private final Map<String, String> storage = new HashMap<>();
     private final Path savePath;
 
+    // Default constructor
     public LocalRepository() {
         String userHome = System.getProperty("user.home");
-        savePath = Paths.get(userHome, ".domainTester", "data.txt");
+        this.savePath = Paths.get(userHome, ".domainTester", "data.txt");
+        initDirectory();
+    }
+
+    // Overloaded constructor: caller provides custom path
+    public LocalRepository(Path customPath) {
+        this.savePath = customPath;
+        initDirectory();
+    }
+
+    private void initDirectory() {
         try {
             Files.createDirectories(savePath.getParent());
         } catch (Exception e) {
@@ -17,7 +27,6 @@ public class LocalRepository {
         }
     }
 
-    // --- Basic CRUD ---
     public void save(String key, String value) {
         storage.put(key, value);
     }
@@ -34,7 +43,6 @@ public class LocalRepository {
         return new ArrayList<>(storage.values());
     }
 
-    // --- Persistence ---
     public void saveAllToFile() throws IOException {
         List<String> lines = new ArrayList<>();
         for (Map.Entry<String, String> entry : storage.entrySet()) {

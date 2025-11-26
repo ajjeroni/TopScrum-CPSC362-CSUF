@@ -1,29 +1,33 @@
-# Makefile for Java project
-
-# Compiler
+# Compiler and runtime
 JAVAC = javac
 JAVA  = java
 
-# Main class (adjust if yours is in a package)
+# Path to JavaFX SDK (adjust if yours is elsewhere)
+JFXPATH = /opt/javafx-sdk-25.0.1/lib
+
+# Main class (use fully qualified name if in a package)
 MAIN = MainApp
 
-# Find all .java files in current directory
+# Sources and classes
 SOURCES = $(wildcard *.java)
-
-# Replace .java with .class
 CLASSES = $(SOURCES:.java=.class)
 
-# Default target: build everything
+# Default target: compile everything
 all: $(CLASSES)
 
-# Rule: how to build .class from .java
+# Compile rule with JavaFX module path
 %.class: %.java
-	$(JAVAC) $<
+	$(JAVAC) --module-path $(JFXPATH) \
+	         --add-modules javafx.controls,javafx.fxml,javafx.graphics \
+	         $<
 
-# Run the program
+# Run target with JavaFX flags
 run: all
-	$(JAVA) $(MAIN)
+	$(JAVA) --module-path $(JFXPATH) \
+	        --add-modules javafx.controls,javafx.fxml,javafx.graphics \
+	        --enable-native-access=javafx.graphics \
+	        $(MAIN)
 
-# Clean up compiled files
+# Clean up
 clean:
 	rm -f *.class

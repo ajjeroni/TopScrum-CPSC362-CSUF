@@ -27,25 +27,46 @@ public class MainApp extends Application {
         notesArea.setEditable(true);
         notesArea.setPromptText("Write your notes here...");
 
-        String buttonStyle = "-fx-font-weight: bold; -fx-font-size: 12px; -fx-padding: 15px 30px;";
-
         // --- Buttons for actions ---
-        Button userButton = new Button("Create User");
-        Button deckButton = new Button("Publish Deck");
-        Button cardButton = new Button("Update Card");
-        Button folderButton = new Button("Manage Folder");
-        Button reviewButton = new Button("Review Attempt");
-        Button deviceButton = new Button("Detect Device");
+        Button userButton = new Button("Users");
+        Button deckButton = new Button("Decks");
+        Button cardButton = new Button("Cards");
+        Button folderButton = new Button("Folder");
+        Button reviewButton = new Button("Review");
+        Button deviceButton = new Button("Device");
 
-        for (Button b : new Button[]{userButton, deckButton, cardButton, folderButton, reviewButton, deviceButton}) {
-            b.setStyle(buttonStyle);
+        Button[] buttons = {userButton, deckButton, cardButton, folderButton, reviewButton, deviceButton};
+
+        // --- NEW: Device detection for platform-aware scaling ---
+        Device device = new Device();
+        String platform = device.getPlatform();
+
+        double baseFontSize;
+        double baseButtonPadding;
+
+        switch (platform.toLowerCase()) {
+            case "windows":
+                baseFontSize = 12;
+                baseButtonPadding = 15;
+                break;
+            case "mac":
+                baseFontSize = 14; // slightly larger for Retina displays
+                baseButtonPadding = 18;
+                break;
+            case "linux":
+                baseFontSize = 12;
+                baseButtonPadding = 15;
+                break;
+            default:
+                baseFontSize = 12;
+                baseButtonPadding = 15;
         }
 
-        // --- NEW: Status label for review state (non-blocking) ---
+        // --- Review Status label ---
         Label reviewStatus = new Label();
         reviewStatus.setStyle("-fx-font-style: italic; -fx-text-fill: darkred;");
 
-        // --- User creation (modal dialog is fine here) ---
+        // --- User creation ---
         userButton.setOnAction(e -> {
             Dialog<User> dialog = new Dialog<>();
             dialog.setTitle("Create User");
@@ -86,7 +107,6 @@ public class MainApp extends Application {
             deck.publish();
             localRepo.save("deck:" + deck.getId(), deck.toString());
 
-            // Show only the deck title
             new Alert(Alert.AlertType.INFORMATION,
                 "Deck published: " + deck.getTitle()).showAndWait();
         });
@@ -98,12 +118,11 @@ public class MainApp extends Application {
             card.setBackText("Executes Java bytecode");
             localRepo.save("card:" + card.getId(), card.toString());
 
-            // Show only the question text
             new Alert(Alert.AlertType.INFORMATION,
                 "Card updated: " + card.getFrontText()).showAndWait();
         });
 
-        // --- Folder management (modal dialog is fine here) ---
+        // --- Folder management ---
         folderButton.setOnAction(e -> {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Manage Folder");
@@ -142,32 +161,30 @@ public class MainApp extends Application {
             });
         });
 
-        // --- Review Attempt (non-blocking, uses status label instead of Alert) ---
+        // --- Review Attempt ---
         reviewButton.setOnAction(e -> {
             if (currentAttempt == null) {
                 currentAttempt = new ReviewAttempt(UUID.randomUUID(), LocalDateTime.now(),
                     null, Quality.EASY, 0, false);
                 localRepo.save("review:" + currentAttempt.getId(), currentAttempt.toString());
-                reviewStatus.setText("Review in progress..."); // update label instead of blocking popup
+                reviewStatus.setText("Review in progress...");
                 reviewButton.setText("End Review");
             } else {
                 currentAttempt.setEndedAt(LocalDateTime.now());
                 localRepo.save("review:" + currentAttempt.getId(), currentAttempt.toString());
-                reviewStatus.setText("Review ended."); // update label instead of blocking popup
+                reviewStatus.setText("Review ended.");
                 currentAttempt = null;
                 reviewButton.setText("Review Attempt");
             }
         });
 
-        // --- Device (auto-detects platform, modal popup is fine here) ---
+        // --- Device detection ---
         deviceButton.setOnAction(e -> {
-            Device device = new Device(); // auto-detects platform
-            device.updateLastSeen();
-            localRepo.save("device:" + device.getId(), device.toString());
-
-            // Show only the platform info
+            Device d = new Device();
+            d.updateLastSeen();
+            localRepo.save("device:" + d.getId(), d.toString());
             new Alert(Alert.AlertType.INFORMATION,
-                "Device detected: " + device.getPlatform()).showAndWait();
+                "Device detected: " + d.getPlatform()).showAndWait();
         });
 
         // --- Layout ---
@@ -175,13 +192,63 @@ public class MainApp extends Application {
             userButton, deckButton, cardButton, folderButton,
             reviewButton, deviceButton);
 
-        BorderPane root = new BorderPane();
-        root.setCenter(notesArea);       // notes area in center
-        root.setLeft(buttonColumn);      // buttons on the left
-        root.setBottom(reviewStatus);    // review status label at bottom
+        // Column width constraints
+        buttonColumn.setPrefWidth(110);   // preferred width
+        buttonColumn.setMaxWidth(220);    // cap maximum width
+        buttonColumn.setMinWidth(90);    // reduce minimum left border
 
-        Scene scene = new Scene(root, 700, 400);
-        primaryStage.setTitle("Domain Tester");
+        BorderPane root = new BorderPane();
+        root.setCenter(notesArea);
+        root.setLeft(buttonColumn);
+        root.setBottom(reviewStatus);
+
+        Scene scene = new Scene(root, 600, 300);
+        primaryStage.setTitle("Top Scrum Flash Card App");
+
+        // Prevent shrinking below button size
+        primaryStage.setMinWidth(250);
+        primaryStage.setMinHeight(350);
+        
+        // --- Apply initial style and max size ---
+        // --- Initial button style tied to column width ---
+        for (Button b : buttons) {
+            b.setStyle("-fx-font-weight: bold; -fx-font-size: " + baseFontSize + "px; "
+                     + "-fx-padding: " + baseButtonPadding + "px " + (baseButtonPadding * 2) + "px;");
+            b.setPrefWidth(buttonColumn.getPrefWidth());   // tie to column width
+            b.setMaxWidth(Double.MAX_VALUE);               // allow expansion within VBox
+            b.setPrefHeight(50);
+            b.setMaxHeight(60);
+            b.setWrapText(true);
+        }
+        // --- Responsive scaling with shared width for column and buttons ---
+        scene.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double width = newVal.doubleValue();
+
+            // Gentler scale factor
+            double scale = width / 700.0;
+
+            // Clamp font size between 12–16px
+            double fontSize = baseFontSize * scale;
+            fontSize = Math.max(12, Math.min(fontSize, 16));
+
+            // Fixed smaller padding
+            double padV = 5;
+            double padH = 10;
+
+            // Single shared width value for column and buttons
+            double sharedWidth = Math.max(80, Math.min(150, 100 * scale));
+
+            // Apply to column
+            buttonColumn.setPrefWidth(sharedWidth);
+
+            // Apply to all buttons
+            for (Button b : buttons) {
+                b.setStyle("-fx-font-weight: bold; -fx-font-size: " + fontSize + "px; "
+                         + "-fx-padding: " + padV + "px " + padH + "px;");
+                b.setPrefWidth(sharedWidth);
+                b.setWrapText(true);
+            }
+        });
         primaryStage.setScene(scene);
         primaryStage.show();
     }

@@ -37,7 +37,7 @@ public class MainApp extends Application {
 
         Button[] buttons = {userButton, deckButton, cardButton, folderButton, reviewButton, deviceButton};
 
-        // --- NEW: Device detection for platform-aware scaling ---
+        // --- Device detection for platform-aware scaling ---
         Device device = new Device();
         String platform = device.getPlatform();
 
@@ -50,7 +50,7 @@ public class MainApp extends Application {
                 baseButtonPadding = 15;
                 break;
             case "mac":
-                baseFontSize = 14; // slightly larger for Retina displays
+                baseFontSize = 14;
                 baseButtonPadding = 18;
                 break;
             case "linux":
@@ -148,7 +148,8 @@ public class MainApp extends Application {
             dialog.showAndWait().ifPresent(button -> {
                 String name = nameField.getText();
                 if (button == saveButtonType) {
-                    localRepo.save("folder:" + name, "Folder: " + name);
+                    Folder folder = new Folder(UUID.randomUUID(), name, LocalDateTime.now());
+                    localRepo.save("folder:" + folder.getId(), folder.toString());
                     new Alert(Alert.AlertType.INFORMATION, "Folder saved: " + name).showAndWait();
                 } else if (button == recallButtonType) {
                     String found = localRepo.find("folder:" + name);
@@ -164,8 +165,7 @@ public class MainApp extends Application {
         // --- Review Attempt ---
         reviewButton.setOnAction(e -> {
             if (currentAttempt == null) {
-                currentAttempt = new ReviewAttempt(UUID.randomUUID(), LocalDateTime.now(),
-                    null, Quality.EASY, 0, false);
+                currentAttempt = new ReviewAttempt(LocalDateTime.now(), Quality.EASY, 0, false);
                 localRepo.save("review:" + currentAttempt.getId(), currentAttempt.toString());
                 reviewStatus.setText("Review in progress...");
                 reviewButton.setText("End Review");
@@ -213,34 +213,25 @@ public class MainApp extends Application {
         // Prevent shrinking below button size
         primaryStage.setMinWidth(250);
         primaryStage.setMinHeight(400);
-        
+
         // --- Apply initial style and max size ---
-        // --- Initial button style tied to column width ---
         for (Button b : buttons) {
             b.setStyle("-fx-font-weight: bold; -fx-font-size: " + baseFontSize + "px; "
                      + "-fx-padding: " + baseButtonPadding + "px " + (baseButtonPadding * 2) + "px;");
-            b.setPrefWidth(buttonColumn.getPrefWidth());   // tie to column width
-            b.setMaxWidth(Double.MAX_VALUE);               // allow expansion within VBox
+            b.setPrefWidth(buttonColumn.getPrefWidth());
+            b.setMaxWidth(Double.MAX_VALUE);
             b.setPrefHeight(50);
             b.setMaxHeight(60);
             b.setWrapText(true);
         }
-        // --- Responsive scaling with shared width for column and buttons ---
+
+        // --- Responsive scaling ---
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
             double width = newVal.doubleValue();
-
-            // Gentler scale factor
             double scale = width / 700.0;
-
-            // Clamp font size between 12–16px
-            double fontSize = baseFontSize * scale;
-            fontSize = Math.max(12, Math.min(fontSize, 16));
-
-            // Fixed smaller padding
+            double fontSize = Math.max(12, Math.min(baseFontSize * scale, 16));
             double padV = 5;
             double padH = 10;
-
-            // Single shared width value for column and buttons
             double sharedWidth = Math.max(80, Math.min(150, 100 * scale));
 
             // Apply to column
@@ -254,20 +245,22 @@ public class MainApp extends Application {
                 b.setWrapText(true);
             }
         });
+
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    @Override
-    public void stop() {
-        try {
-            localRepo.saveAllToFile();
-        } catch (Exception ex) {
-            System.err.println("Failed to save data: " + ex.getMessage());
         }
+
+        @Override
+        public void stop() {
+            try {
+                localRepo.saveAllToFile(); // persist structured entities
+            } catch (Exception ex) {
+                System.err.println("Failed to save data: " + ex.getMessage());
+            }
+        }
+
+        public static void main(String[] args) {
+            launch(args);
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }

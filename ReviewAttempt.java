@@ -4,67 +4,85 @@ import java.time.LocalDateTime;
 public class ReviewAttempt {
     private UUID id;
     private LocalDateTime timestamp;
-    private LocalDateTime endedAt;   // ✅ new field
+    private LocalDateTime endedAt;
     private Quality quality;
     private int responseMs;
     private boolean correct;
+    private Card card;
+    private User user;
 
-    // Full constructor: 6 inputs
+    // Full constructor: all fields provided
     public ReviewAttempt(UUID id, LocalDateTime timestamp, LocalDateTime endedAt,
-                         Quality quality, int responseMs, boolean correct) {
+                         Quality quality, int responseMs, boolean correct,
+                         Card card, User user) {
         this.id = id;
         this.timestamp = timestamp;
         this.endedAt = endedAt;
         this.quality = quality;
         this.responseMs = responseMs;
         this.correct = correct;
+        this.card = card;
+        this.user = user;
     }
 
-    // Constructor: 5 inputs (auto id)
+    // Constructor: auto id
     public ReviewAttempt(LocalDateTime timestamp, LocalDateTime endedAt,
-                         Quality quality, int responseMs, boolean correct) {
+                         Quality quality, int responseMs, boolean correct,
+                         Card card, User user) {
         this.id = UUID.randomUUID();
         this.timestamp = timestamp;
         this.endedAt = endedAt;
         this.quality = quality;
         this.responseMs = responseMs;
         this.correct = correct;
+        this.card = card;
+        this.user = user;
     }
 
-    // Constructor: 4 inputs (auto id, endedAt set later)
+    // Constructor: endedAt set later
     public ReviewAttempt(LocalDateTime timestamp, Quality quality,
-                         int responseMs, boolean correct) {
+                         int responseMs, boolean correct,
+                         Card card, User user) {
         this.id = UUID.randomUUID();
         this.timestamp = timestamp;
-        this.endedAt = null; // can be set later
+        this.endedAt = null;
         this.quality = quality;
         this.responseMs = responseMs;
         this.correct = correct;
+        this.card = card;
+        this.user = user;
     }
 
-    // Constructor: 3 inputs (auto id + timestamp, endedAt set later)
-    public ReviewAttempt(Quality quality, int responseMs, boolean correct) {
+    // Minimal constructor: auto id + timestamp now
+    public ReviewAttempt(Quality quality, int responseMs, boolean correct,
+                         Card card, User user) {
         this.id = UUID.randomUUID();
         this.timestamp = LocalDateTime.now();
         this.endedAt = null;
         this.quality = quality;
         this.responseMs = responseMs;
         this.correct = correct;
+        this.card = card;
+        this.user = user;
     }
 
     // Getters
     public UUID getId() { return id; }
     public LocalDateTime getTimestamp() { return timestamp; }
-    public LocalDateTime getEndedAt() { return endedAt; }   // ✅ new getter
+    public LocalDateTime getEndedAt() { return endedAt; }
     public Quality getQuality() { return quality; }
     public int getResponseMs() { return responseMs; }
     public boolean isCorrect() { return correct; }
+    public Card getCard() { return card; }
+    public User getUser() { return user; }
 
     // Setters
     public void setQuality(Quality quality) { this.quality = quality; }
     public void setResponseMs(int responseMs) { this.responseMs = responseMs; }
     public void setCorrect(boolean correct) { this.correct = correct; }
-    public void setEndedAt(LocalDateTime endedAt) { this.endedAt = endedAt; } // ✅ new setter
+    public void setEndedAt(LocalDateTime endedAt) { this.endedAt = endedAt; }
+    public void setCard(Card card) { this.card = card; }
+    public void setUser(User user) { this.user = user; }
 
     // Example behavior
     public boolean wasFastResponse() {

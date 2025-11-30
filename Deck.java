@@ -1,5 +1,7 @@
 import java.util.UUID;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Deck {
     private UUID id;
@@ -8,8 +10,9 @@ public class Deck {
     private boolean isPublic;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<Card> cards;   // <-- add this field
 
-    // Constructor
+    // Constructor: 6 inputs
     public Deck(UUID id, String title, String description,
                 boolean isPublic, LocalDateTime createdAt,
                 LocalDateTime updatedAt) {
@@ -19,6 +22,39 @@ public class Deck {
         this.isPublic = isPublic;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    // Constructor: 4 inputs (auto isPublic=false, updatedAt=createdAt)
+    public Deck(UUID id, String title, String description, LocalDateTime createdAt) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.isPublic = false;              // default
+        this.createdAt = createdAt;
+        this.updatedAt = createdAt;         // keep consistent
+        this.cards = new ArrayList<>();
+    }
+
+    // Constructor: 3 inputs (title + description, auto id, timestamps now, isPublic=false)
+    public Deck(String title, String description) {
+        this.id = UUID.randomUUID();
+        this.title = title;
+        this.description = description;
+        this.isPublic = false;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = this.createdAt;
+        this.cards = new ArrayList<>();
+    }
+
+    // Constructor: no-arg (auto id, null fields, timestamps now, isPublic=false)
+    public Deck() {
+        this.id = UUID.randomUUID();
+        this.title = null;
+        this.description = null;
+        this.isPublic = false;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = this.createdAt;
+        this.cards = new ArrayList<>();
     }
 
     // Getters
@@ -51,6 +87,17 @@ public class Deck {
         this.updatedAt = LocalDateTime.now();
     }
 
+    // Add a card to this deck
+    public void addCard(Card card) {
+        this.cards.add(card);
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // Get all cards
+    public List<Card> getCards() {
+        return cards;
+    }
+
     @Override
     public String toString() {
         return "Deck{" +
@@ -60,6 +107,7 @@ public class Deck {
                 ", isPublic=" + isPublic +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", cards=" + cards +
                 '}';
     }
 }

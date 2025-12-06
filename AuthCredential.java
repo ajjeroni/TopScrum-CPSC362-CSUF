@@ -5,11 +5,24 @@ public class AuthCredential {
     private AuthProvider provider;
     private String providerUserId;
 
-    // Constructor
+    // Master constructor
     public AuthCredential(UUID id, AuthProvider provider, String providerUserId) {
         this.id = id;
         this.provider = provider;
         this.providerUserId = providerUserId;
+    }
+
+    // Convenience constructors (delegate to master)
+    public AuthCredential(AuthProvider provider, String providerUserId) {
+        this(UUID.randomUUID(), provider, providerUserId);
+    }
+
+    public AuthCredential(AuthProvider provider) {
+        this(UUID.randomUUID(), provider, null);
+    }
+
+    public AuthCredential() {
+        this(UUID.randomUUID(), null, null);
     }
 
     // Getters
@@ -17,7 +30,7 @@ public class AuthCredential {
     public AuthProvider getProvider() { return provider; }
     public String getProviderUserId() { return providerUserId; }
 
-    // Setters (optional, depending on immutability preference)
+    // Setters (optional)
     public void setProvider(AuthProvider provider) { this.provider = provider; }
     public void setProviderUserId(String providerUserId) { this.providerUserId = providerUserId; }
 

@@ -1,58 +1,80 @@
 import java.util.UUID;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ImportJob {
+    // ---fields---
     private UUID id;
-    private ImportSource source;
-    private ImportStatus status;
+    private String source;              // e.g., file path or URL
     private LocalDateTime createdAt;
-    private String log;
+    private LocalDateTime updatedAt;
 
-    // Constructor
-    public ImportJob(UUID id, ImportSource source, ImportStatus status,
-                     LocalDateTime createdAt, String log) {
+    // ---associations---
+    private User user;                  // belongs to one User
+    private List<Deck> decks;           // produces many Decks
+
+    // ---constructors---
+    public ImportJob(UUID id, String source, LocalDateTime createdAt,
+                     LocalDateTime updatedAt, User user, List<Deck> decks) {
         this.id = id;
         this.source = source;
-        this.status = status;
         this.createdAt = createdAt;
-        this.log = log;
+        this.updatedAt = updatedAt;
+        this.user = user;
+        this.decks = decks != null ? decks : new ArrayList<>();
     }
 
-    // Getters
+    public ImportJob(String source, User user) {
+        this(UUID.randomUUID(), source, LocalDateTime.now(),
+             LocalDateTime.now(), user, new ArrayList<>());
+    }
+
+    public ImportJob() {
+        this(UUID.randomUUID(), null, LocalDateTime.now(),
+             LocalDateTime.now(), null, new ArrayList<>());
+    }
+
+    // ---getters---
     public UUID getId() { return id; }
-    public ImportSource getSource() { return source; }
-    public ImportStatus getStatus() { return status; }
+    public String getSource() { return source; }
     public LocalDateTime getCreatedAt() { return createdAt; }
-    public String getLog() { return log; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public User getUser() { return user; }
+    public List<Deck> getDecks() { return decks; }
 
-    // Setters
-    public void setSource(ImportSource source) { this.source = source; }
-    public void setStatus(ImportStatus status) { this.status = status; }
-    public void setLog(String log) { this.log = log; }
-
-    // Example behavior
-    public void appendLog(String message) {
-        this.log += "\n" + message;
+    // ---setters---
+    public void setSource(String source) {
+        this.source = source;
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public void markCompleted() {
-        this.status = ImportStatus.COMPLETED;
-        appendLog("Import completed successfully at " + LocalDateTime.now());
+    public void setUser(User user) { this.user = user; }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    // ---Association Methods---
+    public void addDeck(Deck deck) {
+        decks.add(deck);
+        deck.setImportJob(this); // maintain bidirectional link
+        updatedAt = LocalDateTime.now();
     }
 
-    public void markFailed(String reason) {
-        this.status = ImportStatus.FAILED;
-        appendLog("Import failed: " + reason + " at " + LocalDateTime.now());
+    // ---behavior---
+    public void runImport() {
+        System.out.println("Running import from source: " + source);
+        updatedAt = LocalDateTime.now();
     }
 
     @Override
     public String toString() {
         return "ImportJob{" +
                 "id=" + id +
-                ", source=" + source +
-                ", status=" + status +
+                ", source='" + source + '\'' +
                 ", createdAt=" + createdAt +
-                ", log='" + log + '\'' +
+                ", updatedAt=" + updatedAt +
+                ", user=" + (user != null ? user.getId() : "null") +
+                ", decks=" + decks +
                 '}';
     }
 }

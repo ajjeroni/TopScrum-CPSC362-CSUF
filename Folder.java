@@ -8,53 +8,50 @@ public class Folder {
     private String name;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<Deck> decks;   // <-- add this field
+    private List<Deck> decks;
+    private List<Folder> children;   // recursive hierarchy
 
-    // Full constructor: 4 inputs
-    public Folder(UUID id, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    // Master constructor
+    public Folder(UUID id, String name, LocalDateTime createdAt, LocalDateTime updatedAt,
+                  List<Deck> decks, List<Folder> children) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.decks = new ArrayList<>();
+        this.decks = decks != null ? decks : new ArrayList<>();
+        this.children = children != null ? children : new ArrayList<>();
     }
 
-    // Constructor: 3 inputs (auto updatedAt = createdAt)
+    // Convenience constructors (delegate to master)
     public Folder(UUID id, String name, LocalDateTime createdAt) {
-        this.id = id;
-        this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = createdAt;
-        this.decks = new ArrayList<>();
+        this(id, name, createdAt, createdAt, new ArrayList<>(), new ArrayList<>()
+);
     }
 
-    // Constructor: 2 inputs (id + name, auto createdAt/updatedAt)
     public Folder(UUID id, String name) {
-        this.id = id;
-        this.name = name;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-        this.decks = new ArrayList<>();
+        this(id, name, LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>(), new ArrayList<>()
+);
     }
 
-    // Constructor: 1 input (name only, auto id, timestamps now)
     public Folder(String name) {
-        this.id = UUID.randomUUID();
-        this.name = name;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-        this.decks = new ArrayList<>();
+        this(UUID.randomUUID(), name, LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>(), new ArrayList<>()
+);
     }
 
-    // Add a deck to this folder
+    public Folder() {
+        this(UUID.randomUUID(), null, LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>(), new ArrayList<>()
+);
+    }
+
+    // Association methods
     public void addDeck(Deck deck) {
-        this.decks.add(deck);
-        this.updatedAt = LocalDateTime.now();
+        decks.add(deck);
+        updatedAt = LocalDateTime.now();
     }
 
-    // Get all decks
-    public List<Deck> getDecks() {
-        return decks;
+    public void addChild(Folder child) {
+        children.add(child);
+        updatedAt = LocalDateTime.now();
     }
 
     // Getters
@@ -62,6 +59,8 @@ public class Folder {
     public String getName() { return name; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public List<Deck> getDecks() { return decks; }
+    public List<Folder> getChildren() { return children; }
 
     // Setters
     public void setName(String name) {
@@ -83,6 +82,7 @@ public class Folder {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", decks=" + decks +
+                ", children=" + children +
                 '}';
     }
 }

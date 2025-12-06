@@ -1,42 +1,62 @@
 import java.util.UUID;
+import java.time.LocalDateTime;
 
 public class ExampleSentence {
+    // ---fields---
     private UUID id;
-    private AttachmentType type;
-    private String url;
-    private String altText;
+    private String text;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    // Constructor
-    public ExampleSentence(UUID id, AttachmentType type, String url, String altText) {
+    // ---associations---
+    private Card card;   // belongs to one Card
+
+    // ---constructors---
+    public ExampleSentence(UUID id, String text, LocalDateTime createdAt, LocalDateTime updatedAt, Card card) {
         this.id = id;
-        this.type = type;
-        this.url = url;
-        this.altText = altText;
+        this.text = text;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.card = card;
     }
 
-    // Getters
+    // Convenience constructors (delegate to master)
+    public ExampleSentence(String text) {
+        this(UUID.randomUUID(), text, LocalDateTime.now(), LocalDateTime.now(), null);
+    }
+
+    public ExampleSentence() {
+        this(UUID.randomUUID(), null, LocalDateTime.now(), LocalDateTime.now(), null);
+    }
+
+    // ---getters---
     public UUID getId() { return id; }
-    public AttachmentType getType() { return type; }
-    public String getUrl() { return url; }
-    public String getAltText() { return altText; }
+    public String getText() { return text; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public Card getCard() { return card; }
 
-    // Setters
-    public void setType(AttachmentType type) { this.type = type; }
-    public void setUrl(String url) { this.url = url; }
-    public void setAltText(String altText) { this.altText = altText; }
+    // ---setters---
+    public void setText(String text) {
+        this.text = text;
+        this.updatedAt = LocalDateTime.now();
+    }
 
-    // Example behavior
-    public boolean isTextBased() {
-        return type == AttachmentType.DOCUMENT || type == AttachmentType.OTHER;
+    public void setCard(Card card) { this.card = card; }  // ✅ now available
+
+    // ---behavior---
+    public void printSentence() {
+        System.out.println(text);
     }
 
     @Override
     public String toString() {
         return "ExampleSentence{" +
                 "id=" + id +
-                ", type=" + type +
-                ", url='" + url + '\'' +
-                ", altText='" + altText + '\'' +
+                ", text='" + text + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", card=" + (card != null ? card.getId() : "null") +
                 '}';
     }
 }

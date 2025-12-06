@@ -13,22 +13,33 @@ public class User {
     private boolean isLanguageLearner;
     private boolean isOrganizer;
     private boolean isCommuter;
+
+    // Associations
+    private UISettings settings;
+    private List<AuthCredential> credentials;
     private List<Folder> folders;
-    private List<ReviewAttempt> attempts = new ArrayList<>();
+    private List<Deck> decks;
+    private List<CardProgress> progressRecords;
+    private List<ReviewAttempt> attempts;
+    private List<DeckShare> shares;
+    private List<ImportJob> importJobs;
+    private List<Device> devices;
+    private List<ReviewAttempt> reviewAttempts = new ArrayList<>();
 
-    public void addAttempt(ReviewAttempt attempt) {
-        attempts.add(attempt);
-    }
-
-    public List<ReviewAttempt> getAttempts() {
-        return attempts;
-    }
-
-    // Constructor: 9 inputs (full control)
+    // Master constructor
     public User(UUID id, String name, String email,
                 LocalDateTime createdAt, LocalDateTime updatedAt,
                 boolean isPowerUser, boolean isLanguageLearner,
-                boolean isOrganizer, boolean isCommuter) {
+                boolean isOrganizer, boolean isCommuter,
+                UISettings settings,
+                List<AuthCredential> credentials,
+                List<Folder> folders,
+                List<Deck> decks,
+                List<CardProgress> progressRecords,
+                List<ReviewAttempt> attempts,
+                List<DeckShare> shares,
+                List<ImportJob> importJobs,
+                List<Device> devices) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -38,58 +49,98 @@ public class User {
         this.isLanguageLearner = isLanguageLearner;
         this.isOrganizer = isOrganizer;
         this.isCommuter = isCommuter;
+        this.settings = settings;
+        this.credentials = credentials != null ? credentials : new ArrayList<>();
+        this.folders = folders != null ? folders : new ArrayList<>();
+        this.decks = decks != null ? decks : new ArrayList<>();
+        this.progressRecords = progressRecords != null ? progressRecords : new ArrayList<>();
+        this.attempts = attempts != null ? attempts : new ArrayList<>();
+        this.shares = shares != null ? shares : new ArrayList<>();
+        this.importJobs = importJobs != null ? importJobs : new ArrayList<>();
+        this.devices = devices != null ? devices : new ArrayList<>();
     }
 
-    // Constructor: 2 inputs (name + email, auto id, timestamps now, flags false)
     public User(String name, String email) {
-        this.id = UUID.randomUUID();
-        this.name = name;
-        this.email = email;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-        this.isPowerUser = false;
-        this.isLanguageLearner = false;
-        this.isOrganizer = false;
-        this.isCommuter = false;
-        this.folders = new ArrayList<>();
+        this(UUID.randomUUID(), name, email,
+             LocalDateTime.now(), LocalDateTime.now(),
+             false, false, false, false,
+             null,
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>());
     }
 
-    // Constructor: 1 input (name only, auto id/email null, timestamps now, flags false)
     public User(String name) {
-        this.id = UUID.randomUUID();
-        this.name = name;
-        this.email = null;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-        this.isPowerUser = false;
-        this.isLanguageLearner = false;
-        this.isOrganizer = false;
-        this.isCommuter = false;
-        this.folders = new ArrayList<>();
+        this(UUID.randomUUID(), name, null,
+             LocalDateTime.now(), LocalDateTime.now(),
+             false, false, false, false,
+             null,
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>());
     }
 
-    // Constructor: no-arg (auto id, null name/email, timestamps now, flags false)
     public User() {
-        this.id = UUID.randomUUID();
-        this.name = null;
-        this.email = null;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-        this.isPowerUser = false;
-        this.isLanguageLearner = false;
-        this.isOrganizer = false;
-        this.isCommuter = false;
-        this.folders = new ArrayList<>();
+        this(UUID.randomUUID(), null, null,
+             LocalDateTime.now(), LocalDateTime.now(),
+             false, false, false, false,
+             null,
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>());
     }
 
-    // Add a folder to this user
-    public void addFolder(Folder folder) {
-        this.folders.add(folder);
-        this.updatedAt = LocalDateTime.now();
+    public User(String name, String email, UISettings settings) {
+        this(UUID.randomUUID(), name, email,
+             LocalDateTime.now(), LocalDateTime.now(),
+             false, false, false, false,
+             settings,
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>());
     }
 
-    public List<Folder> getFolders() {
-        return folders;
+    public User(String name, String email, List<AuthCredential> credentials) {
+        this(UUID.randomUUID(), name, email,
+             LocalDateTime.now(), LocalDateTime.now(),
+             false, false, false, false,
+             null,
+             credentials, new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>());
+    }
+
+    // Association methods
+    public UISettings getSettings() { return settings; }
+    public List<AuthCredential> getCredentials() { return credentials; }
+    public List<Folder> getFolders() { return folders; }
+    public List<Deck> getDecks() { return decks; }
+    public List<CardProgress> getProgressRecords() { return progressRecords; }
+    public List<ReviewAttempt> getAttempts() { return attempts; }
+    public List<DeckShare> getShares() { return shares; }
+    public List<ImportJob> getImportJobs() { return importJobs; }
+    public List<Device> getDevices() { return devices; }
+
+    public void addCredential(AuthCredential credential) { credentials.add(credential); }
+    public void addFolder(Folder folder) { folders.add(folder); updatedAt = LocalDateTime.now(); }
+    public void addDeck(Deck deck) { decks.add(deck); updatedAt = LocalDateTime.now(); }
+    public void addProgress(CardProgress progress) { progressRecords.add(progress); }
+    public void addAttempt(ReviewAttempt attempt) { attempts.add(attempt); }
+    public void addShare(DeckShare share) {
+        if (!shares.contains(share)) {
+            shares.add(share);
+            share.setUser(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void addImportJob(ImportJob job) { importJobs.add(job); }
+    public void addDevice(Device device) { devices.add(device); }
+    public void addReviewAttempt(ReviewAttempt attempt) {
+        if (!reviewAttempts.contains(attempt)) {
+            reviewAttempts.add(attempt);
+            attempt.setUser(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
     }
 
     // Getters
@@ -102,8 +153,9 @@ public class User {
     public boolean isLanguageLearner() { return isLanguageLearner; }
     public boolean isOrganizer() { return isOrganizer; }
     public boolean isCommuter() { return isCommuter; }
+    public List<ReviewAttempt> getReviewAttempts() { return reviewAttempts; }
 
-    // Setters (optional, depending on immutability preference)
+    // Setters
     public void setName(String name) { this.name = name; }
     public void setEmail(String email) { this.email = email; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }

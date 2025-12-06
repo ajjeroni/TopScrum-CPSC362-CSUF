@@ -6,12 +6,25 @@ public class UISettings {
     private float fontScale;
     private boolean useSystemTheme;
 
-    // Constructor
+    // Master constructor
     public UISettings(UUID id, Theme theme, float fontScale, boolean useSystemTheme) {
         this.id = id;
         this.theme = theme;
         this.fontScale = fontScale;
         this.useSystemTheme = useSystemTheme;
+    }
+
+    // Convenience constructors (all delegate to master)
+    public UISettings(Theme theme, float fontScale, boolean useSystemTheme) {
+        this(UUID.randomUUID(), theme, fontScale, useSystemTheme);
+    }
+
+    public UISettings(Theme theme) {
+        this(UUID.randomUUID(), theme, 1.0f, true);
+    }
+
+    public UISettings() {
+        this(UUID.randomUUID(), Theme.SYSTEM, 1.0f, true);
     }
 
     // Getters

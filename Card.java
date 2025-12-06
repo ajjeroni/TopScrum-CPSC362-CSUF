@@ -4,83 +4,73 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Card {
+    // ---fields---
     private UUID id;
     private String frontText;
     private String backText;
     private String hint;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    // ---associations---
+    private Deck deck;   // belongs to one Deck
     private List<ReviewAttempt> attempts = new ArrayList<>();
+    private List<Attachment> attachments = new ArrayList<>();
+    private List<ExampleSentence> exampleSentences = new ArrayList<>();
+    private List<CardProgress> progressRecords = new ArrayList<>();
+    private List<Tag> tags = new ArrayList<>(); //Card has many Tags
 
-    public void addAttempt(ReviewAttempt attempt) {
-        attempts.add(attempt);
-    }
-
-    public List<ReviewAttempt> getAttempts() {
-        return attempts;
-    }
-
-    // Constructor: 6 inputs (full control)
+    // ---constructors---
     public Card(UUID id, String frontText, String backText, String hint,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.frontText = frontText;
         this.backText = backText;
-        this.hint = hint;
+        this.hint = hint != null ? hint : "";
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.attempts = new ArrayList<>();
+        this.attachments = new ArrayList<>();
+        this.exampleSentences = new ArrayList<>();
+        this.progressRecords = new ArrayList<>();
     }
 
-    // Constructor: 4 inputs (id + front/back + createdAt, auto hint="", updatedAt=createdAt)
     public Card(UUID id, String frontText, String backText, LocalDateTime createdAt) {
-        this.id = id;
-        this.frontText = frontText;
-        this.backText = backText;
-        this.hint = "";                  // default empty
-        this.createdAt = createdAt;
-        this.updatedAt = createdAt;      // keep consistent
+        this(id, frontText, backText, "", createdAt, createdAt);
     }
 
-    // Constructor: 5 inputs (auto updatedAt = createdAt)
-    public Card(UUID id, String frontText, String backText, String hint,
-                LocalDateTime createdAt) {
-        this.id = id;
-        this.frontText = frontText;
-        this.backText = backText;
-        this.hint = hint;
-        this.createdAt = createdAt;
-        this.updatedAt = createdAt;   // keep consistent
+    public Card(UUID id, String frontText, String backText, String hint, LocalDateTime createdAt) {
+        this(id, frontText, backText, hint, createdAt, createdAt);
     }
 
-    // Constructor: 3 inputs (front/back only, auto id, hint empty, timestamps now)
     public Card(String frontText, String backText) {
-        this.id = UUID.randomUUID();
-        this.frontText = frontText;
-        this.backText = backText;
-        this.hint = "";
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
+        this(UUID.randomUUID(), frontText, backText, "", LocalDateTime.now(), LocalDateTime.now());
     }
 
-    // Constructor: 4 inputs (front/back + hint, auto id, timestamps now)
     public Card(String frontText, String backText, String hint) {
-        this.id = UUID.randomUUID();
-        this.frontText = frontText;
-        this.backText = backText;
-        this.hint = hint;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
+        this(UUID.randomUUID(), frontText, backText, hint, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    // Getters
+    public Card() {
+        this(UUID.randomUUID(), null, null, "", LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    // ---getters---
     public UUID getId() { return id; }
     public String getFrontText() { return frontText; }
     public String getBackText() { return backText; }
     public String getHint() { return hint; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public Deck getDeck() { return deck; }   // NEW
 
-    // Setters
+    public List<ReviewAttempt> getAttempts() { return attempts; }
+    public List<Attachment> getAttachments() { return attachments; }
+    public List<ExampleSentence> getExampleSentences() { return exampleSentences; }
+    public List<CardProgress> getProgressRecords() { return progressRecords; }
+    public List<Tag> getTags() { return tags; }
+
+    // ---setters---
     public void setFrontText(String frontText) {
         this.frontText = frontText;
         this.updatedAt = LocalDateTime.now();
@@ -96,11 +86,51 @@ public class Card {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setDeck(Deck deck) { this.deck = deck; }
+
+    // ---Association Methods---
+    public void addAttempt(ReviewAttempt attempt) {
+        if (!attempts.contains(attempt)) {
+            attempts.add(attempt);
+            attempt.setCard(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
     }
 
-    // Example behavior
+    public void addAttachment(Attachment attachment) {
+        if (!attachments.contains(attachment)) {
+            attachments.add(attachment);
+            attachment.setCard(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    public void addExampleSentence(ExampleSentence sentence) {
+        if (!exampleSentences.contains(sentence)) {
+            exampleSentences.add(sentence);
+            sentence.setCard(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    public void addProgress(CardProgress progress) {
+        if (!progressRecords.contains(progress)) {
+            progressRecords.add(progress);
+            progress.setCard(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    public void addTag(Tag tag) {
+        if (!tags.contains(tag)) {
+            tags.add(tag);
+            tag.addCard(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    // ---behavior---
     public void flip() {
         System.out.println("Front: " + frontText);
         System.out.println("Back: " + backText);

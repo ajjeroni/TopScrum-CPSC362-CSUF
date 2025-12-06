@@ -11,7 +11,7 @@ public class ReviewAttempt {
     private Card card;
     private User user;
 
-    // Full constructor: all fields provided
+    // Master constructor
     public ReviewAttempt(UUID id, LocalDateTime timestamp, LocalDateTime endedAt,
                          Quality quality, int responseMs, boolean correct,
                          Card card, User user) {
@@ -25,45 +25,26 @@ public class ReviewAttempt {
         this.user = user;
     }
 
-    // Constructor: auto id
+    // Convenience constructors (delegate to master)
     public ReviewAttempt(LocalDateTime timestamp, LocalDateTime endedAt,
                          Quality quality, int responseMs, boolean correct,
                          Card card, User user) {
-        this.id = UUID.randomUUID();
-        this.timestamp = timestamp;
-        this.endedAt = endedAt;
-        this.quality = quality;
-        this.responseMs = responseMs;
-        this.correct = correct;
-        this.card = card;
-        this.user = user;
+        this(UUID.randomUUID(), timestamp, endedAt, quality, responseMs, correct, card, user);
     }
 
-    // Constructor: endedAt set later
     public ReviewAttempt(LocalDateTime timestamp, Quality quality,
                          int responseMs, boolean correct,
                          Card card, User user) {
-        this.id = UUID.randomUUID();
-        this.timestamp = timestamp;
-        this.endedAt = null;
-        this.quality = quality;
-        this.responseMs = responseMs;
-        this.correct = correct;
-        this.card = card;
-        this.user = user;
+        this(UUID.randomUUID(), timestamp, null, quality, responseMs, correct, card, user);
     }
 
-    // Minimal constructor: auto id + timestamp now
     public ReviewAttempt(Quality quality, int responseMs, boolean correct,
                          Card card, User user) {
-        this.id = UUID.randomUUID();
-        this.timestamp = LocalDateTime.now();
-        this.endedAt = null;
-        this.quality = quality;
-        this.responseMs = responseMs;
-        this.correct = correct;
-        this.card = card;
-        this.user = user;
+        this(UUID.randomUUID(), LocalDateTime.now(), null, quality, responseMs, correct, card, user);
+    }
+
+    public ReviewAttempt() {
+        this(UUID.randomUUID(), LocalDateTime.now(), null, null, 0, false, null, null);
     }
 
     // Getters
@@ -94,7 +75,7 @@ public class ReviewAttempt {
         return "ReviewAttempt{" +
                 "id=" + id +
                 ", timestamp=" + timestamp +
-                ", endedAt=" + endedAt +   // ✅ include endedAt
+                ", endedAt=" + endedAt +
                 ", quality=" + quality +
                 ", responseMs=" + responseMs +
                 ", correct=" + correct +

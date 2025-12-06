@@ -1,48 +1,47 @@
 import java.util.UUID;
 import java.time.LocalDateTime;
 import java.net.InetAddress;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Device {
+    // ---fields---
     private UUID id;
     private String platform;
     private LocalDateTime lastSeenAt;
 
-    // Full constructor
-    public Device(UUID id, String platform, LocalDateTime lastSeenAt) {
+    // ---associations---
+    private List<SyncState> syncStates;   // NEW: Device has many SyncStates
+
+    // ---constructors---
+    // Master constructor
+    public Device(UUID id, String platform, LocalDateTime lastSeenAt, List<SyncState> syncStates) {
         this.id = id;
         this.platform = platform;
         this.lastSeenAt = lastSeenAt;
+        this.syncStates = syncStates != null ? syncStates : new ArrayList<>();
     }
 
-    // Constructor: auto id
+    // Convenience constructors (delegate to master)
     public Device(String platform, LocalDateTime lastSeenAt) {
-        this.id = UUID.randomUUID();
-        this.platform = platform;
-        this.lastSeenAt = lastSeenAt;
+        this(UUID.randomUUID(), platform, lastSeenAt, new ArrayList<>());
     }
 
-    // Constructor: auto lastSeenAt
     public Device(UUID id, String platform) {
-        this.id = id;
-        this.platform = platform;
-        this.lastSeenAt = LocalDateTime.now();
+        this(id, platform, LocalDateTime.now(), new ArrayList<>());
     }
 
-    // Constructor: auto id + auto lastSeenAt
     public Device(String platform) {
-        this.id = UUID.randomUUID();
-        this.platform = platform;
-        this.lastSeenAt = LocalDateTime.now();
+        this(UUID.randomUUID(), platform, LocalDateTime.now(), new ArrayList<>());
     }
 
-    // NEW: No-arg constructor that auto-detects platform
     public Device() {
-        this.id = UUID.randomUUID();
-        this.platform = detectPlatform();
-        this.lastSeenAt = LocalDateTime.now();
+        this(UUID.randomUUID(), detectPlatform(), LocalDateTime.now(), new ArrayList<>());
     }
 
-    private String detectPlatform() {
+    // ---helpers---
+    // Platform detection helper
+    private static String detectPlatform() {
         try {
             String os = System.getProperty("os.name");
             String version = System.getProperty("os.version");
@@ -54,15 +53,23 @@ public class Device {
         }
     }
 
-    // Getters
+    // ---getters---
     public UUID getId() { return id; }
     public String getPlatform() { return platform; }
     public LocalDateTime getLastSeenAt() { return lastSeenAt; }
+    public List<SyncState> getSyncStates() { return syncStates; }   // NEW
 
-    // Setters
+    // ---setters---
     public void setPlatform(String platform) { this.platform = platform; }
     public void setLastSeenAt(LocalDateTime lastSeenAt) { this.lastSeenAt = lastSeenAt; }
 
+    // ---Association Methods---
+    public void addSyncState(SyncState syncState) {
+        syncStates.add(syncState);
+        syncState.setDevice(this); // maintain bidirectional link
+    }
+
+    // ---behavior---
     public void updateLastSeen() {
         this.lastSeenAt = LocalDateTime.now();
     }
@@ -73,6 +80,7 @@ public class Device {
                 "id=" + id +
                 ", platform='" + platform + '\'' +
                 ", lastSeenAt=" + lastSeenAt +
+                ", syncStates=" + syncStates +
                 '}';
     }
 }

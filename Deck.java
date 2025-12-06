@@ -10,62 +10,55 @@ public class Deck {
     private boolean isPublic;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<Card> cards;   // <-- add this field
 
-    // Constructor: 6 inputs
+    // Associations
+    private List<Card> cards;
+    private ImportJob importJob;   // belongs to one ImportJob
+    private OfflineCache offlineCache;   // belongs to one OfflineCache
+    private List<Tag> tags = new ArrayList<>();
+    private List<DeckShare> shares = new ArrayList<>();
+
+    // ---constructors---
     public Deck(UUID id, String title, String description,
                 boolean isPublic, LocalDateTime createdAt,
-                LocalDateTime updatedAt) {
+                LocalDateTime updatedAt, List<Card> cards) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.isPublic = isPublic;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.cards = cards != null ? cards : new ArrayList<>();
     }
 
-    // Constructor: 4 inputs (auto isPublic=false, updatedAt=createdAt)
     public Deck(UUID id, String title, String description, LocalDateTime createdAt) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.isPublic = false;              // default
-        this.createdAt = createdAt;
-        this.updatedAt = createdAt;         // keep consistent
-        this.cards = new ArrayList<>();
+        this(id, title, description, false, createdAt, createdAt, new ArrayList<>());
     }
 
-    // Constructor: 3 inputs (title + description, auto id, timestamps now, isPublic=false)
     public Deck(String title, String description) {
-        this.id = UUID.randomUUID();
-        this.title = title;
-        this.description = description;
-        this.isPublic = false;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-        this.cards = new ArrayList<>();
+        this(UUID.randomUUID(), title, description, false,
+             LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>());
     }
 
-    // Constructor: no-arg (auto id, null fields, timestamps now, isPublic=false)
     public Deck() {
-        this.id = UUID.randomUUID();
-        this.title = null;
-        this.description = null;
-        this.isPublic = false;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-        this.cards = new ArrayList<>();
+        this(UUID.randomUUID(), null, null, false,
+             LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>());
     }
 
-    // Getters
+    // ---getters---
     public UUID getId() { return id; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public boolean isPublic() { return isPublic; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public List<Card> getCards() { return cards; }
+    public ImportJob getImportJob() { return importJob; }
+    public OfflineCache getOfflineCache() { return offlineCache; }
+    public List<Tag> getTags() { return tags; }
+    public List<DeckShare> getShares() { return shares; }
 
-    // Setters
+    // ---setters---
     public void setTitle(String title) {
         this.title = title;
         this.updatedAt = LocalDateTime.now();
@@ -81,21 +74,40 @@ public class Deck {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Example behavior
+    public void setImportJob(ImportJob importJob) {
+        this.importJob = importJob;
+    }
+
+    public void setOfflineCache(OfflineCache offlineCache) {
+        this.offlineCache = offlineCache;
+    }
+
+    // ---Associations Methods---
+    public void addTag(Tag tag) {
+        if (!tags.contains(tag)) {
+            tags.add(tag);
+            tag.addDeck(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void addShare(DeckShare share) {
+        if (!shares.contains(share)) {
+            shares.add(share);
+            share.setDeck(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void addCard(Card card) {
+        if (!cards.contains(card)) {
+            cards.add(card);
+            card.setDeck(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    // ---behavior---
     public void publish() {
         this.isPublic = true;
         this.updatedAt = LocalDateTime.now();
-    }
-
-    // Add a card to this deck
-    public void addCard(Card card) {
-        this.cards.add(card);
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // Get all cards
-    public List<Card> getCards() {
-        return cards;
     }
 
     @Override

@@ -1,0 +1,22 @@
+=== Run at 2025-12-06T23:25:17.244527120 ===
+Cache decks count: 1
+Deck offlineCache: OfflineCache{id=cfafe888-0e9b-42a3-ab30-20019cf1995a, createdAt=2025-12-06T23:25:17.224250982, updatedAt=2025-12-06T23:25:17.224484829, decks=[Deck{id=62cf8beb-ae7c-49d8-875c-c8c9db493abd, title='Spanish Vocabulary', description='Basic words', isPublic=false, createdAt=2025-12-06T23:25:17.224466393, updatedAt=2025-12-06T23:25:17.224472061, cards=[]}], progressRecords=[]}
+Cache decks count after removal: 0
+Deck offlineCache after removal: null
+
+Cache progress count: 1
+Progress offlineCache: OfflineCache{id=cfafe888-0e9b-42a3-ab30-20019cf1995a, createdAt=2025-12-06T23:25:17.224250982, updatedAt=2025-12-06T23:25:17.230800426, decks=[], progressRecords=[CardProgress{id=3bc1b9e7-86ee-4fca-befa-81ffcdcfff69, dueAt=2025-12-06T23:25:17.230786463, intervalDays=1, ease=2.5, streak=0, lastReviewedAt=null, card=e0d0d1b7-364f-49f0-b7dc-9ea0770e84db, offlineCache=cfafe888-0e9b-42a3-ab30-20019cf1995a}]}
+Cache progress count after clear: 0
+Progress offlineCache after clear: null
+
+=== Run at 2025-12-06T23:26:03.265626307 ===
+Cache decks count: 1
+Deck offlineCache: OfflineCache{id=b6c41ddb-15a2-48f3-838b-e7d3905c8b0b, createdAt=2025-12-06T23:26:03.249779069, updatedAt=2025-12-06T23:26:03.250051254, decks=[Deck{id=f678490b-846b-4e8b-a480-b8a8b519b4e9, title='Spanish Vocabulary', description='Basic words', isPublic=false, createdAt=2025-12-06T23:26:03.250030427, updatedAt=2025-12-06T23:26:03.250037017, cards=[]}], progressRecords=[]}
+Cache decks count after removal: 0
+Deck offlineCache after removal: null
+
+Cache progress count: 1
+Progress offlineCache: OfflineCache{id=b6c41ddb-15a2-48f3-838b-e7d3905c8b0b, createdAt=2025-12-06T23:26:03.249779069, updatedAt=2025-12-06T23:26:03.258822267, decks=[], progressRecords=[CardProgress{id=f19710c2-36ae-400b-ab8b-01c452019ef2, dueAt=2025-12-06T23:26:03.258808340, intervalDays=1, ease=2.5, streak=0, lastReviewedAt=null, card=8850ce11-81da-4675-bc42-f2f0fd13080f, offlineCache=b6c41ddb-15a2-48f3-838b-e7d3905c8b0b}]}
+Cache progress count after clear: 0
+Progress offlineCache after clear: null
+

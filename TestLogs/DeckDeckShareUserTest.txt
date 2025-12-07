@@ -1,0 +1,36 @@
+=== Run at 2025-12-06T23:25:16.435851428 ===
+Deck shares count: 2
+Sean shares count: 1
+Alex shares count: 1
+Owner can edit? true
+Owner isOwner? true
+Editor can edit? true
+Editor isOwner? false
+Owner equals duplicate? true
+
+After detaching Alex:
+Deck shares count: 1
+Alex shares count: 0
+
+After detaching Sean:
+Deck shares count: 0
+Sean shares count: 0
+
+=== Run at 2025-12-06T23:26:02.386148596 ===
+Deck shares count: 2
+Sean shares count: 1
+Alex shares count: 1
+Owner can edit? true
+Owner isOwner? true
+Editor can edit? true
+Editor isOwner? false
+Owner equals duplicate? true
+
+After detaching Alex:
+Deck shares count: 1
+Alex shares count: 0
+
+After detaching Sean:
+Deck shares count: 0
+Sean shares count: 0
+

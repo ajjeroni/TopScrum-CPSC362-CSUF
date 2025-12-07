@@ -1,0 +1,26 @@
+=== Run at 2025-12-06T23:25:17.096642033 ===
+User devices count: 1
+Device sync states count: 2
+Initial sync version: 1
+Failed sync version: 2
+
+After removing initial sync:
+Device sync states count: 1
+Initial sync device: null
+
+After clearing all sync states:
+Device sync states count: 0
+
+=== Run at 2025-12-06T23:26:03.121649510 ===
+User devices count: 1
+Device sync states count: 2
+Initial sync version: 1
+Failed sync version: 2
+
+After removing initial sync:
+Device sync states count: 1
+Initial sync device: null
+
+After clearing all sync states:
+Device sync states count: 0
+

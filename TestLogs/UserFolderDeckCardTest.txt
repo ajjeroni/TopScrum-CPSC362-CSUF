@@ -1,0 +1,26 @@
+=== Run at 2025-12-06T23:25:16.772669874 ===
+User → Folder: true
+Folder → Deck: true
+Deck → Card: true
+Card → Attachment: true
+Card → ExampleSentence: true
+User: Sean
+Folder: Spanish Vocabulary
+Deck: Verbs
+Card: hablar → to speak
+Attachment URL: audio/hablar.mp3
+Example sentence: Yo quiero hablar contigo.
+
+=== Run at 2025-12-06T23:26:02.766480113 ===
+User → Folder: true
+Folder → Deck: true
+Deck → Card: true
+Card → Attachment: true
+Card → ExampleSentence: true
+User: Sean
+Folder: Spanish Vocabulary
+Deck: Verbs
+Card: hablar → to speak
+Attachment URL: audio/hablar.mp3
+Example sentence: Yo quiero hablar contigo.
+

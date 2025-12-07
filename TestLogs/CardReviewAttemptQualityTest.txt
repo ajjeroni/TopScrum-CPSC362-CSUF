@@ -1,0 +1,24 @@
+=== Run at 2025-12-06T23:25:16.246212064 ===
+Card: comer → to eat
+ReviewAttempts count: 3
+Attempt ID: 8936eff8-34fa-4eb6-8405-2259bf595862 | Quality: GOOD(4) | Score: 4 | Linked Card: comer
+Attempt ID: 57765e95-9178-4007-91ea-24bc4427599c | Quality: HARD(3) | Score: 3 | Linked Card: comer
+Attempt ID: 3858c0e3-a6a3-4243-b0dd-f08f0deed2e8 | Quality: EASY(5) | Score: 5 | Linked Card: comer
+
+After removing attempt2:
+ReviewAttempts count: 2
+Remaining Attempt Quality: GOOD(4)
+Remaining Attempt Quality: EASY(5)
+
+=== Run at 2025-12-06T23:26:02.164729422 ===
+Card: comer → to eat
+ReviewAttempts count: 3
+Attempt ID: 1c375615-c8c4-4cc8-a5f0-984134d37e28 | Quality: GOOD(4) | Score: 4 | Linked Card: comer
+Attempt ID: 13d166a9-e2ad-464f-8e64-f7c5a42fbcc6 | Quality: HARD(3) | Score: 3 | Linked Card: comer
+Attempt ID: 74201c87-e657-41fd-94c9-02c95527a716 | Quality: EASY(5) | Score: 5 | Linked Card: comer
+
+After removing attempt2:
+ReviewAttempts count: 2
+Remaining Attempt Quality: GOOD(4)
+Remaining Attempt Quality: EASY(5)
+

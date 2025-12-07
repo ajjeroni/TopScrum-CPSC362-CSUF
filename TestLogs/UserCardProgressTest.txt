@@ -1,0 +1,42 @@
+=== Run at 2025-12-06T23:25:17.167187690 ===
+=== Initial State ===
+User → Progress count: 2
+Progress1 active? true
+Progress2 active? true
+
+=== After Deactivating Progress1 ===
+Progress1 active? false
+Progress2 active? true
+
+=== After Reactivating All ===
+Progress1 active? true
+Progress2 active? true
+
+=== After Cascade Removal ===
+User → Progress count: 0
+Card1 → Progress count: 0
+Card2 → Progress count: 0
+Progress1 → User: true
+Progress2 → User: true
+
+=== Run at 2025-12-06T23:26:03.184269621 ===
+=== Initial State ===
+User → Progress count: 2
+Progress1 active? true
+Progress2 active? true
+
+=== After Deactivating Progress1 ===
+Progress1 active? false
+Progress2 active? true
+
+=== After Reactivating All ===
+Progress1 active? true
+Progress2 active? true
+
+=== After Cascade Removal ===
+User → Progress count: 0
+Card1 → Progress count: 0
+Card2 → Progress count: 0
+Progress1 → User: true
+Progress2 → User: true
+

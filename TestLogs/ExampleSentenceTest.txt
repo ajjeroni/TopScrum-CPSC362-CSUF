@@ -1,0 +1,10 @@
+=== Run at 2025-12-06T23:25:16.650131133 ===
+Card → ExampleSentence: true
+ExampleSentence → Card: true
+Sentence text: Yo quiero comer pizza.
+
+=== Run at 2025-12-06T23:26:02.619292869 ===
+Card → ExampleSentence: true
+ExampleSentence → Card: true
+Sentence text: Yo quiero comer pizza.
+

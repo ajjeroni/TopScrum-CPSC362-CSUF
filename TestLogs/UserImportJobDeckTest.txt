@@ -1,0 +1,36 @@
+=== Run at 2025-12-06T23:25:17.031243697 ===
+User jobs count: 1
+Job decks count: 2
+Spanish deck import job: ImportJob{id=14b74155-f149-4009-968c-55830dc0a840, source='cards.csv', createdAt=2025-12-06T23:25:17.012960034, updatedAt=2025-12-06T23:25:17.013266722, user=e7ae7225-1f27-4562-a651-a7ca9abbe3be, decks=[Deck{id=e69f66dd-c34d-4f06-beff-b28490570524, title='Spanish Basics', description='Intro verbs', isPublic=false, createdAt=2025-12-06T23:25:17.013219654, updatedAt=2025-12-06T23:25:17.013226067, cards=[]}, Deck{id=201c88db-a397-460a-a205-b3d8d014f2bc, title='French Basics', description='Intro verbs', isPublic=false, createdAt=2025-12-06T23:25:17.013252144, updatedAt=2025-12-06T23:25:17.013256662, cards=[]}]}
+Running import from source: cards.csv
+Job equals duplicate? true
+
+After removing Spanish deck:
+Job decks count: 1
+Spanish deck import job: null
+
+After clearing all decks:
+Job decks count: 0
+
+After detaching from user:
+User jobs count: 0
+Job user: null
+
+=== Run at 2025-12-06T23:26:03.049516581 ===
+User jobs count: 1
+Job decks count: 2
+Spanish deck import job: ImportJob{id=1b00be87-42ed-444e-9184-04935dc46b0a, source='cards.csv', createdAt=2025-12-06T23:26:03.033373904, updatedAt=2025-12-06T23:26:03.033668853, user=e8bb4d56-2d7f-4ff3-b1e9-b8a9d7eb29f9, decks=[Deck{id=83722f8b-5ffd-4da6-a384-4b3f7bac5d80, title='Spanish Basics', description='Intro verbs', isPublic=false, createdAt=2025-12-06T23:26:03.033615615, updatedAt=2025-12-06T23:26:03.033622237, cards=[]}, Deck{id=84ccd907-2c45-4635-89ac-e66945dfc0c8, title='French Basics', description='Intro verbs', isPublic=false, createdAt=2025-12-06T23:26:03.033655007, updatedAt=2025-12-06T23:26:03.033659340, cards=[]}]}
+Running import from source: cards.csv
+Job equals duplicate? true
+
+After removing Spanish deck:
+Job decks count: 1
+Spanish deck import job: null
+
+After clearing all decks:
+Job decks count: 0
+
+After detaching from user:
+User jobs count: 0
+Job user: null
+

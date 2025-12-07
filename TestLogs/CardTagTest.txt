@@ -1,0 +1,34 @@
+=== Run at 2025-12-06T23:25:16.578593343 ===
+After card.addTag(tag):
+Card → Tag: true
+Tag → Card: true
+
+After card.removeTag(tag):
+Card → Tag: false
+Tag → Card: false
+
+After tag.addCard(card):
+Card → Tag: true
+Tag → Card: true
+
+After tag.removeCard(card):
+Card → Tag: false
+Tag → Card: false
+
+=== Run at 2025-12-06T23:26:02.553022060 ===
+After card.addTag(tag):
+Card → Tag: true
+Tag → Card: true
+
+After card.removeTag(tag):
+Card → Tag: false
+Tag → Card: false
+
+After tag.addCard(card):
+Card → Tag: true
+Tag → Card: true
+
+After tag.removeCard(card):
+Card → Tag: false
+Tag → Card: false
+

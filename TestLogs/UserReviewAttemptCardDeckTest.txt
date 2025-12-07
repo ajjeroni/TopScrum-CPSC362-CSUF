@@ -1,0 +1,26 @@
+=== Run at 2025-12-06T23:25:16.707205375 ===
+User attempts: 2
+Deck attempts: 2
+
+After removing card1:
+Deck cards: 1
+User attempts: 1
+Deck attempts: 1
+
+After detaching attempt2:
+User attempts: 0
+Card2 attempts: 0
+
+=== Run at 2025-12-06T23:26:02.699014614 ===
+User attempts: 2
+Deck attempts: 2
+
+After removing card1:
+Deck cards: 1
+User attempts: 1
+Deck attempts: 1
+
+After detaching attempt2:
+User attempts: 0
+Card2 attempts: 0
+

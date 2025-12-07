@@ -11,9 +11,9 @@ public class Card {
     private String hint;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Deck deck;   // belongs to one Deck
 
     // ---associations---
-    private Deck deck;   // belongs to one Deck
     private List<ReviewAttempt> attempts = new ArrayList<>();
     private List<Attachment> attachments = new ArrayList<>();
     private List<ExampleSentence> exampleSentences = new ArrayList<>();

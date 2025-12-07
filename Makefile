@@ -1,23 +1,20 @@
+# Compiler
 JAVAC = javac
 JAVA  = java
 
-JFX_PATH = /opt/javafx-sdk-25.0.1/lib
-GSON_JAR = gson-2.13.1.jar
+# Source files (all .java in current dir)
+SOURCES = $(wildcard *.java)
 
-JFX_FLAGS = --module-path $(JFX_PATH) --add-modules javafx.controls,javafx.fxml
-CP = .:$(GSON_JAR)
+# Class files
+CLASSES = $(SOURCES:.java=.class)
 
-SOURCES = MainApp.java User.java Folder.java Deck.java Card.java ReviewAttempt.java Quality.java
-MAINCLASS = MainApp
+# Default target: compile everything
+all: $(CLASSES)
 
-all: compile
+# Rule to compile .java to .class
+%.class: %.java
+	$(JAVAC) $<
 
-compile:
-	$(JAVAC) -cp $(CP) $(JFX_FLAGS) $(SOURCES)
-
-run: compile
-	$(JAVA) -cp $(CP) $(JFX_FLAGS) $(MAINCLASS)
-
+# Clean up compiled files
 clean:
 	rm -f *.class
-

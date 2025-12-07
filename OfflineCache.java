@@ -11,7 +11,8 @@ public class OfflineCache {
 
     // ---associations---
     private List<Deck> decks;                // OfflineCache holds many Decks
-    private List<CardProgress> progressRecords; // NEW: OfflineCache holds many CardProgress
+    private List<CardProgress> progressRecords; // OfflineCache holds many CardProgress
+    private Deck deck;
 
     // ---constructors---
     public OfflineCache(UUID id, LocalDateTime createdAt, LocalDateTime updatedAt,
@@ -34,9 +35,11 @@ public class OfflineCache {
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public List<Deck> getDecks() { return decks; }
     public List<CardProgress> getProgressRecords() { return progressRecords; }
+    public Deck getDeck() { return deck; }
 
     // ---setters---
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setDeck(Deck deck) { this.deck = deck; }
 
     // ---Association Methods---
     public void addDeck(Deck deck) {

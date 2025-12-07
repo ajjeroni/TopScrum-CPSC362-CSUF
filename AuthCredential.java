@@ -4,6 +4,7 @@ public class AuthCredential {
     private UUID id;
     private AuthProvider provider;
     private String providerUserId;
+    private User user; // back-reference
 
     // Master constructor
     public AuthCredential(UUID id, AuthProvider provider, String providerUserId) {
@@ -29,10 +30,12 @@ public class AuthCredential {
     public UUID getId() { return id; }
     public AuthProvider getProvider() { return provider; }
     public String getProviderUserId() { return providerUserId; }
+    public User getUser() { return user; }
 
-    // Setters (optional)
+    // Setters
     public void setProvider(AuthProvider provider) { this.provider = provider; }
     public void setProviderUserId(String providerUserId) { this.providerUserId = providerUserId; }
+    public void setUser(User user) { this.user = user; }
 
     @Override
     public String toString() {
@@ -40,6 +43,7 @@ public class AuthCredential {
                 "id=" + id +
                 ", provider=" + provider +
                 ", providerUserId='" + providerUserId + '\'' +
+                ", user=" + (user != null ? user.getName() : "null") +
                 '}';
     }
 }

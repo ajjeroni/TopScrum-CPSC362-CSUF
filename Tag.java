@@ -38,18 +38,14 @@ public class Tag {
     public void addDeck(Deck deck) {
         if (!decks.contains(deck)) {
             decks.add(deck);
-            if (!deck.getTags().contains(this)) {
-                deck.getTags().add(this); // maintain bidirectional link
-            }
+            deck.addTag(this); // delegate to Deck’s association method
         }
     }
 
     public void addCard(Card card) {
         if (!cards.contains(card)) {
             cards.add(card);
-            if (!card.getTags().contains(this)) {
-                card.getTags().add(this); // maintain bidirectional link
-            }
+            card.addTag(this); // delegate to Card’s association method
         }
     }
 

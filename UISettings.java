@@ -18,7 +18,9 @@ public class UISettings {
     public UISettings(Theme theme, float fontScale, boolean useSystemTheme) {
         this(UUID.randomUUID(), theme, fontScale, useSystemTheme);
     }
-
+    public UISettings(boolean useSystemTheme, int fontSize) {
+        this(UUID.randomUUID(), Theme.SYSTEM, (float) fontSize, useSystemTheme);
+    }
     public UISettings(Theme theme) {
         this(UUID.randomUUID(), theme, 1.0f, true);
     }
@@ -37,12 +39,18 @@ public class UISettings {
     public void setTheme(Theme theme) { this.theme = theme; }
     public void setFontScale(float fontScale) { this.fontScale = fontScale; }
     public void setUseSystemTheme(boolean useSystemTheme) { this.useSystemTheme = useSystemTheme; }
-
+    public void setDarkMode(boolean enabled) {
+        this.theme = enabled ? Theme.DARK : Theme.LIGHT;
+        this.useSystemTheme = false; // optional: override system theme
+    }
     // Example behavior
     public void toggleSystemTheme() {
         this.useSystemTheme = !this.useSystemTheme;
     }
-
+    // Convenience check
+    public boolean isDarkMode() {
+        return this.theme == Theme.DARK;
+    }
     @Override
     public String toString() {
         return "UISettings{" +

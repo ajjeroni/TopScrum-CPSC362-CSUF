@@ -17,8 +17,8 @@ public class User {
     // Associations
     private UISettings settings;
     private List<AuthCredential> credentials;
-    private List<Folder> folders;
-    private List<Deck> decks;
+    private List<Folder> folders = new ArrayList<>();
+    private List<Deck> decks = new ArrayList<>();
     private List<CardProgress> progressRecords;
     private List<ReviewAttempt> attempts;
     private List<DeckShare> shares;
@@ -119,11 +119,28 @@ public class User {
     public List<ReviewAttempt> getAttempts() { return attempts; }
     public List<DeckShare> getShares() { return shares; }
     public List<ImportJob> getImportJobs() { return importJobs; }
-    public List<Device> getDevices() { return devices; }
-
-    public void addCredential(AuthCredential credential) { credentials.add(credential); }
-    public void addFolder(Folder folder) { folders.add(folder); updatedAt = LocalDateTime.now(); }
-    public void addDeck(Deck deck) { decks.add(deck); updatedAt = LocalDateTime.now(); }
+    public List<Device> getDevices() { return devices; }// Association methods
+    public void addCredential(AuthCredential credential) {
+        if (!credentials.contains(credential)) {
+            credentials.add(credential);
+            credential.setUser(this); // back-reference
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void addFolder(Folder folder) {
+        if (!folders.contains(folder)) {
+            folders.add(folder);
+            folder.setUser(this); // back-reference
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void addDeck(Deck deck) {
+        if (!decks.contains(deck)) {
+            decks.add(deck);
+            deck.setUser(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
     public void addProgress(CardProgress progress) { progressRecords.add(progress); }
     public void addAttempt(ReviewAttempt attempt) { attempts.add(attempt); }
     public void addShare(DeckShare share) {
@@ -159,6 +176,10 @@ public class User {
     public void setName(String name) { this.name = name; }
     public void setEmail(String email) { this.email = email; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setSettings(UISettings settings) {
+        this.settings = settings;
+        this.updatedAt = LocalDateTime.now(); // optional: keep timestamps fresh
+    }
 
     // Example behavior
     public void promoteToPowerUser() {

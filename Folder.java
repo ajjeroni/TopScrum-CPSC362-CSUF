@@ -10,6 +10,8 @@ public class Folder {
     private LocalDateTime updatedAt;
     private List<Deck> decks;
     private List<Folder> children;   // recursive hierarchy
+    private User user;          // back-reference to User
+    private Folder parent;      // back-reference to parent Folder
 
     // Master constructor
     public Folder(UUID id, String name, LocalDateTime createdAt, LocalDateTime updatedAt,
@@ -45,13 +47,19 @@ public class Folder {
 
     // Association methods
     public void addDeck(Deck deck) {
-        decks.add(deck);
-        updatedAt = LocalDateTime.now();
+        if (!decks.contains(deck)) {
+            decks.add(deck);
+            deck.setFolder(this); // back-reference
+            updatedAt = LocalDateTime.now();
+        }
     }
 
     public void addChild(Folder child) {
-        children.add(child);
-        updatedAt = LocalDateTime.now();
+        if (!children.contains(child)) {
+            children.add(child);
+            child.setParent(this); // back-reference
+            updatedAt = LocalDateTime.now();
+        }
     }
 
     // Getters
@@ -61,12 +69,16 @@ public class Folder {
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public List<Deck> getDecks() { return decks; }
     public List<Folder> getChildren() { return children; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
     // Setters
     public void setName(String name) {
         this.name = name;
         this.updatedAt = LocalDateTime.now();
     }
+    public Folder getParent() { return parent; }
+    public void setParent(Folder parent) { this.parent = parent; }
 
     // Example behavior
     public void rename(String newName) {

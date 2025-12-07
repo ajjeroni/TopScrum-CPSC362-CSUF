@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 public class ExampleSentence {
     // ---fields---
     private UUID id;
-    private String text;
+    private String sentence;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -14,7 +14,7 @@ public class ExampleSentence {
     // ---constructors---
     public ExampleSentence(UUID id, String text, LocalDateTime createdAt, LocalDateTime updatedAt, Card card) {
         this.id = id;
-        this.text = text;
+        this.sentence = text;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.card = card;
@@ -31,29 +31,29 @@ public class ExampleSentence {
 
     // ---getters---
     public UUID getId() { return id; }
-    public String getText() { return text; }
+    public String getSentence() { return sentence; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public Card getCard() { return card; }
 
     // ---setters---
-    public void setText(String text) {
-        this.text = text;
+    public void setSentence(String sentence) {
+        this.sentence = sentence;
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void setCard(Card card) { this.card = card; }  // ✅ now available
+    public void setCard(Card card) { this.card = card; }
 
     // ---behavior---
     public void printSentence() {
-        System.out.println(text);
+        System.out.println(sentence);
     }
 
     @Override
     public String toString() {
         return "ExampleSentence{" +
                 "id=" + id +
-                ", text='" + text + '\'' +
+                ", sentence='" + sentence + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", card=" + (card != null ? card.getId() : "null") +

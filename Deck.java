@@ -17,6 +17,8 @@ public class Deck {
     private OfflineCache offlineCache;   // belongs to one OfflineCache
     private List<Tag> tags = new ArrayList<>();
     private List<DeckShare> shares = new ArrayList<>();
+    private Folder folder; // back-reference to Folder
+    private User user;
 
     // ---constructors---
     public Deck(UUID id, String title, String description,
@@ -57,6 +59,8 @@ public class Deck {
     public OfflineCache getOfflineCache() { return offlineCache; }
     public List<Tag> getTags() { return tags; }
     public List<DeckShare> getShares() { return shares; }
+    public Folder getFolder() { return folder; }
+    public User getUser() { return user; }
 
     // ---setters---
     public void setTitle(String title) {
@@ -80,7 +84,14 @@ public class Deck {
 
     public void setOfflineCache(OfflineCache offlineCache) {
         this.offlineCache = offlineCache;
+        if (offlineCache != null) {
+            offlineCache.setDeck(this);
+        }
     }
+    public void setFolder(Folder folder) {
+        this.folder = folder;
+    }
+    public void setUser(User user) { this.user = user; }
 
     // ---Associations Methods---
     public void addTag(Tag tag) {

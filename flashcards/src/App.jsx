@@ -1,14 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { Plus, ArrowRight, CheckCircle, BarChart3 } from "lucide-react";
+
+/* -------------------------------------------
+   Simple Tailwind-based Components
+------------------------------------------- */
+const Card = ({ children, className, ...props }) => (
+  <div className={`bg-blue-50 rounded-2xl shadow p-6 ${className}`} {...props}>{children}</div>
+);
+const CardContent = ({ children }) => <div>{children}</div>;
+const Button = ({ children, className, ...props }) => (
+  <button className={`bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 ${className}`} {...props}>{children}</button>
+);
+const Input = ({ className, ...props }) => (
+  <input className={`border border-gray-300 rounded-lg p-2 ${className}`} {...props} />
+);
 
 /* -------------------------------------------
    Simple Spaced Repetition (SM-2 style lite)
@@ -57,10 +64,9 @@ function Dashboard({ cards }) {
   const dueCards = cards.filter((c) => c.due <= Date.now());
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-60">
       <h1 className="text-4xl font-bold">Dashboard</h1>
-
-      <Card className="p-6 shadow-xl rounded-2xl w-96">
+      <Card className="w-96">
         <CardContent className="text-center">
           <h2 className="text-2xl font-semibold mb-3">Study Overview</h2>
           <p className="text-xl">Total Cards: {cards.length}</p>
@@ -84,11 +90,8 @@ function Study({ cards, setCards }) {
     return <h2 className="text-2xl text-center mt-20">No cards due right now 🎉</h2>;
 
   const current = dueCards[index];
-
   const answer = (quality) => {
-    const updated = cards.map((c) =>
-      c.id === current.id ? updateCardDifficulty(c, quality) : c
-    );
+    const updated = cards.map((c) => c.id === current.id ? updateCardDifficulty(c, quality) : c);
     setCards(updated);
     setShowBack(false);
     setIndex((i) => (i + 1) % dueCards.length);
@@ -103,10 +106,7 @@ function Study({ cards, setCards }) {
         animate={{ opacity: 1, rotateY: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <Card
-          className="w-96 h-56 flex items-center justify-center text-center p-6 cursor-pointer text-xl font-semibold shadow-xl rounded-2xl"
-          onClick={() => setShowBack(!showBack)}
-        >
+        <Card className="w-96 h-56 flex items-center justify-center text-center cursor-pointer text-xl font-semibold" onClick={() => setShowBack(!showBack)}>
           <CardContent>{showBack ? current.back : current.front}</CardContent>
         </Card>
       </motion.div>
@@ -133,10 +133,7 @@ function Manage({ cards, setCards }) {
 
   const add = () => {
     if (!front || !back) return;
-    setCards([
-      ...cards,
-      { id: Date.now(), front, back, interval: 1, due: Date.now() },
-    ]);
+    setCards([...cards, { id: Date.now(), front, back, interval: 1, due: Date.now() }]);
     setFront("");
     setBack("");
   };
@@ -144,8 +141,7 @@ function Manage({ cards, setCards }) {
   return (
     <div className="flex flex-col items-center gap-6">
       <h1 className="text-3xl font-bold">Manage Cards</h1>
-
-      <Card className="w-full max-w-xl p-6 shadow-md rounded-2xl bg-white">
+      <Card className="w-full max-w-xl">
         <h2 className="text-2xl font-semibold mb-4">Add a Flashcard</h2>
         <div className="grid gap-4">
           <Input placeholder="Front" value={front} onChange={(e) => setFront(e.target.value)} />
@@ -156,7 +152,7 @@ function Manage({ cards, setCards }) {
 
       <div className="w-full max-w-xl grid gap-4">
         {cards.map((c) => (
-          <Card key={c.id} className="p-4 shadow rounded-xl">
+          <Card key={c.id} className="p-4">
             <p className="font-semibold">{c.front}</p>
             <p className="text-gray-600">{c.back}</p>
             <p className="text-sm mt-2">Interval: {c.interval} days</p>
@@ -166,4 +162,3 @@ function Manage({ cards, setCards }) {
     </div>
   );
 }
-

@@ -14,7 +14,7 @@ public class Card {
     private Deck deck;   // belongs to one Deck
 
     // ---associations---
-    private List<ReviewAttempt> attempts = new ArrayList<>();
+    private List<ReviewAttempt> reviewAttempts = new ArrayList<>();
     private List<Attachment> attachments = new ArrayList<>();
     private List<ExampleSentence> exampleSentences = new ArrayList<>();
     private List<CardProgress> progressRecords = new ArrayList<>();
@@ -29,7 +29,7 @@ public class Card {
         this.hint = hint != null ? hint : "";
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.attempts = new ArrayList<>();
+        this.reviewAttempts = new ArrayList<>();
         this.attachments = new ArrayList<>();
         this.exampleSentences = new ArrayList<>();
         this.progressRecords = new ArrayList<>();
@@ -62,9 +62,8 @@ public class Card {
     public String getHint() { return hint; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public Deck getDeck() { return deck; }   // NEW
-
-    public List<ReviewAttempt> getAttempts() { return attempts; }
+    public Deck getDeck() { return deck; }
+    public List<ReviewAttempt> getReviewAttempts() { return reviewAttempts; }
     public List<Attachment> getAttachments() { return attachments; }
     public List<ExampleSentence> getExampleSentences() { return exampleSentences; }
     public List<CardProgress> getProgressRecords() { return progressRecords; }
@@ -90,14 +89,20 @@ public class Card {
     public void setDeck(Deck deck) { this.deck = deck; }
 
     // ---Association Methods---
-    public void addAttempt(ReviewAttempt attempt) {
-        if (!attempts.contains(attempt)) {
-            attempts.add(attempt);
+    public void addReviewAttempt(ReviewAttempt attempt) {
+        if (!reviewAttempts.contains(attempt)) {
+            reviewAttempts.add(attempt);
             attempt.setCard(this); // maintain bidirectional link
             updatedAt = LocalDateTime.now();
         }
     }
-
+    public void removeReviewAttempt(ReviewAttempt attempt) {
+        if (reviewAttempts.contains(attempt)) {
+            reviewAttempts.remove(attempt);
+            attempt.setCard(null);
+            updatedAt = LocalDateTime.now();
+        }
+    }
     public void addAttachment(Attachment attachment) {
         if (!attachments.contains(attachment)) {
             attachments.add(attachment);
@@ -105,7 +110,16 @@ public class Card {
             updatedAt = LocalDateTime.now();
         }
     }
-
+    public void clearReviewAttempts() {
+        for (ReviewAttempt attempt : new ArrayList<>(reviewAttempts)) {
+            attempt.setCard(null);
+            if (attempt.getUser() != null) {
+                attempt.getUser().removeReviewAttempt(attempt);
+            }
+        }
+        reviewAttempts.clear();
+        updatedAt = LocalDateTime.now();
+    }
     public void addExampleSentence(ExampleSentence sentence) {
         if (!exampleSentences.contains(sentence)) {
             exampleSentences.add(sentence);
@@ -113,7 +127,6 @@ public class Card {
             updatedAt = LocalDateTime.now();
         }
     }
-
     public void addProgress(CardProgress progress) {
         if (!progressRecords.contains(progress)) {
             progressRecords.add(progress);
@@ -121,11 +134,24 @@ public class Card {
             updatedAt = LocalDateTime.now();
         }
     }
-
+    public void removeProgress(CardProgress progress) {
+        if (progressRecords.contains(progress)) {
+            progressRecords.remove(progress);
+            progress.setCard(null); // break bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
     public void addTag(Tag tag) {
         if (!tags.contains(tag)) {
             tags.add(tag);
             tag.addCard(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void removeTag(Tag tag) {
+        if (tags.contains(tag)) {
+            tags.remove(tag);
+            tag.getCards().remove(this); // break bidirectional link
             updatedAt = LocalDateTime.now();
         }
     }

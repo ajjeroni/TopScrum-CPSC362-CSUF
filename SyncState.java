@@ -8,7 +8,8 @@ public class SyncState {
     private int dirtyCount;
     private Device device;   // belongs to one Device
 
-    // Constructor
+    // ---constructors---
+    // Explicit constructor
     public SyncState(UUID id, LocalDateTime lastSyncedAt, long version, int dirtyCount) {
         this.id = id;
         this.lastSyncedAt = lastSyncedAt;
@@ -16,20 +17,25 @@ public class SyncState {
         this.dirtyCount = dirtyCount;
     }
 
-    // Getters
+    // Convenience no-arg constructor
+    public SyncState() {
+        this(UUID.randomUUID(), LocalDateTime.now(), 0L, 0);
+    }
+
+    // ---getters---
     public UUID getId() { return id; }
     public LocalDateTime getLastSyncedAt() { return lastSyncedAt; }
     public long getVersion() { return version; }
     public int getDirtyCount() { return dirtyCount; }
     public Device getDevice() { return device; }
 
-    // Setters
+    // ---setters---
     public void setLastSyncedAt(LocalDateTime lastSyncedAt) { this.lastSyncedAt = lastSyncedAt; }
     public void setVersion(long version) { this.version = version; }
     public void setDirtyCount(int dirtyCount) { this.dirtyCount = dirtyCount; }
     public void setDevice(Device device) { this.device = device; }
 
-    // Example behaviors
+    // ---behaviors---
     public void markSynced(long newVersion) {
         this.lastSyncedAt = LocalDateTime.now();
         this.version = newVersion;

@@ -9,6 +9,8 @@ public class CardProgress {
     private float ease;
     private int streak;
     private LocalDateTime lastReviewedAt;
+    private User user;
+    private boolean active = true; // track whether progress is active
 
     // ---associations---
     private Card card;             // belongs to one Card
@@ -50,6 +52,8 @@ public class CardProgress {
     public LocalDateTime getLastReviewedAt() { return lastReviewedAt; }
     public Card getCard() { return card; }
     public OfflineCache getOfflineCache() { return offlineCache; }   // NEW
+    public User getUser() { return user; }
+    public boolean isActive() { return active; }
 
     // ---setters---
     public void setIntervalDays(int intervalDays) { this.intervalDays = intervalDays; }
@@ -59,9 +63,10 @@ public class CardProgress {
     public void setLastReviewedAt(LocalDateTime lastReviewedAt) { this.lastReviewedAt = lastReviewedAt; }
     public void setCard(Card card) { this.card = card; }
     public void setOfflineCache(OfflineCache offlineCache) { this.offlineCache = offlineCache; } // NEW
+    public void setUser(User user) { this.user = user; }
 
     // ---behavior---
-    // Example behavior: record a review attempt
+    // record a review attempt
     public void recordReview(boolean correct, int qualityScore) {
         this.lastReviewedAt = LocalDateTime.now();
 
@@ -75,6 +80,13 @@ public class CardProgress {
             intervalDays = 1;
             dueAt = LocalDateTime.now().plusDays(intervalDays);
         }
+    }
+    public void deactivate() {
+        this.active = false;
+    }
+
+    public void reactivate() {
+        this.active = true;
     }
 
     @Override

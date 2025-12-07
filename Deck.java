@@ -61,6 +61,14 @@ public class Deck {
     public List<DeckShare> getShares() { return shares; }
     public Folder getFolder() { return folder; }
     public User getUser() { return user; }
+    // Convenience: collect all attempts across cards
+    public List<ReviewAttempt> getAllReviewAttempts() {
+        List<ReviewAttempt> allAttempts = new ArrayList<>();
+        for (Card card : cards) {
+            allAttempts.addAll(card.getReviewAttempts());
+        }
+        return allAttempts;
+    }
 
     // ---setters---
     public void setTitle(String title) {
@@ -108,10 +116,40 @@ public class Deck {
             updatedAt = LocalDateTime.now();
         }
     }
+    public void removeShare(DeckShare share) {
+        if (shares.contains(share)) {
+            shares.remove(share);
+            share.setDeck(null); // break back-reference
+            if (share.getUser() != null) {
+                share.getUser().getShares().remove(share);
+                share.setUser(null);
+            }
+            updatedAt = LocalDateTime.now();
+        }
+    }
     public void addCard(Card card) {
         if (!cards.contains(card)) {
             cards.add(card);
             card.setDeck(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void removeCard(Card card) {
+        if (cards.contains(card)) {
+            cards.remove(card);
+            card.setDeck(null);
+
+            // Cascade: clear review attempts
+            card.clearReviewAttempts();
+
+            // Cascade: clear progress records
+            for (CardProgress progress : new ArrayList<>(card.getProgressRecords())) {
+                card.removeProgress(progress);
+                if (progress.getUser() != null) {
+                    progress.getUser().removeProgress(progress);
+                }
+            }
+
             updatedAt = LocalDateTime.now();
         }
     }

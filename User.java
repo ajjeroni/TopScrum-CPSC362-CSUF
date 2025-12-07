@@ -19,7 +19,7 @@ public class User {
     private List<AuthCredential> credentials;
     private List<Folder> folders = new ArrayList<>();
     private List<Deck> decks = new ArrayList<>();
-    private List<CardProgress> progressRecords;
+    private List<CardProgress> progressRecords = new ArrayList<>();
     private List<ReviewAttempt> attempts;
     private List<DeckShare> shares;
     private List<ImportJob> importJobs;
@@ -141,7 +141,13 @@ public class User {
             updatedAt = LocalDateTime.now();
         }
     }
-    public void addProgress(CardProgress progress) { progressRecords.add(progress); }
+    public void addProgress(CardProgress progress) {
+        if (!progressRecords.contains(progress)) {
+            progressRecords.add(progress);
+            progress.setUser(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
     public void addAttempt(ReviewAttempt attempt) { attempts.add(attempt); }
     public void addShare(DeckShare share) {
         if (!shares.contains(share)) {
@@ -158,6 +164,76 @@ public class User {
             attempt.setUser(this); // maintain bidirectional link
             updatedAt = LocalDateTime.now();
         }
+    }
+    public void removeReviewAttempt(ReviewAttempt attempt) {
+        if (reviewAttempts.contains(attempt)) {
+            reviewAttempts.remove(attempt);
+            attempt.setUser(null); // break bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void clearReviewAttempts() {
+        for (ReviewAttempt attempt : new ArrayList<>(reviewAttempts)) {
+            attempt.setUser(null);
+            if (attempt.getCard() != null) {
+                attempt.getCard().getReviewAttempts().remove(attempt);
+                attempt.setCard(null);
+            }
+        }
+        reviewAttempts.clear();
+        updatedAt = LocalDateTime.now();
+    }
+    public void removeProgress(CardProgress progress) {
+        if (progressRecords.contains(progress)) {
+            progressRecords.remove(progress);
+            progress.setUser(null); // break bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void deactivateProgressRecords() {
+        for (CardProgress progress : progressRecords) {
+            progress.deactivate(); // mark inactive instead of removing
+        }
+    }
+    public void reactivateProgressRecords() {
+        for (CardProgress progress : progressRecords) {
+            progress.reactivate();
+        }
+    }
+    public void clearProgressRecords() {
+        for (CardProgress progress : new ArrayList<>(progressRecords)) {
+            // break bidirectional links
+            progress.setUser(null);
+            if (progress.getCard() != null) {
+                progress.getCard().getProgressRecords().remove(progress);
+                progress.setCard(null);
+            }
+        }
+        progressRecords.clear();
+        updatedAt = LocalDateTime.now();
+    }
+    public void removeShare(DeckShare share) {
+        if (shares.contains(share)) {
+            shares.remove(share);
+            share.setUser(null); // break back-reference
+            if (share.getDeck() != null) {
+                share.getDeck().getShares().remove(share);
+                share.setDeck(null);
+            }
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    public void clearShares() {
+        for (DeckShare share : new ArrayList<>(shares)) {
+            share.setUser(null);
+            if (share.getDeck() != null) {
+                share.getDeck().getShares().remove(share);
+                share.setDeck(null);
+            }
+        }
+        shares.clear();
+        updatedAt = LocalDateTime.now();
     }
 
     // Getters

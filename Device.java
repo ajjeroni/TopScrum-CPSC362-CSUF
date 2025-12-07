@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Device {
     // ---fields---
@@ -12,6 +13,7 @@ public class Device {
 
     // ---associations---
     private List<SyncState> syncStates;   // NEW: Device has many SyncStates
+    private List<OfflineCache> offlineCaches = new ArrayList<>();
 
     // ---constructors---
     // Master constructor
@@ -57,7 +59,9 @@ public class Device {
     public UUID getId() { return id; }
     public String getPlatform() { return platform; }
     public LocalDateTime getLastSeenAt() { return lastSeenAt; }
-    public List<SyncState> getSyncStates() { return syncStates; }   // NEW
+    public List<SyncState> getSyncStates() {
+        return Collections.unmodifiableList(syncStates);
+    }
 
     // ---setters---
     public void setPlatform(String platform) { this.platform = platform; }
@@ -65,8 +69,43 @@ public class Device {
 
     // ---Association Methods---
     public void addSyncState(SyncState syncState) {
-        syncStates.add(syncState);
-        syncState.setDevice(this); // maintain bidirectional link
+        if (syncState != null && !syncStates.contains(syncState)) {
+            syncStates.add(syncState);
+            syncState.setDevice(this);
+            updateLastSeen();
+        }
+    }
+    public void removeSyncState(SyncState syncState) {
+        if (syncState != null && syncStates.contains(syncState)) {
+            syncStates.remove(syncState);
+            syncState.setDevice(null); // break back-reference
+            updateLastSeen();          // refresh timestamp on remove
+        }
+    }
+
+    public void clearSyncStates() {
+        for (SyncState state : new ArrayList<>(syncStates)) {
+            state.setDevice(null);
+        }
+        syncStates.clear();
+        updateLastSeen();              // refresh timestamp on clear
+    }
+    public void addOfflineCache(OfflineCache cache) {
+        if (cache != null && !offlineCaches.contains(cache)) {
+            offlineCaches.add(cache);
+            cache.setDevice(this);
+        }
+    }
+
+    public void removeOfflineCache(OfflineCache cache) {
+        if (offlineCaches.contains(cache)) {
+            offlineCaches.remove(cache);
+            cache.setDevice(null);
+        }
+    }
+
+    public List<OfflineCache> getOfflineCaches() {
+        return offlineCaches;
     }
 
     // ---behavior---
@@ -82,5 +121,17 @@ public class Device {
                 ", lastSeenAt=" + lastSeenAt +
                 ", syncStates=" + syncStates +
                 '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Device)) return false;
+        Device other = (Device) o;
+        return id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

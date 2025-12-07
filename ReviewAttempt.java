@@ -65,6 +65,23 @@ public class ReviewAttempt {
     public void setCard(Card card) { this.card = card; }
     public void setUser(User user) { this.user = user; }
 
+    // Detach safely from both sides
+    public void detach() {
+        if (user != null) {
+            user.getReviewAttempts().remove(this);
+            user = null;
+        }
+        if (card != null) {
+            card.getReviewAttempts().remove(this);
+            card = null;
+        }
+    }
+
+    // Convenience: find deck through card
+    public Deck getDeck() {
+        return card != null ? card.getDeck() : null;
+    }
+
     // Example behavior
     public boolean wasFastResponse() {
         return responseMs < 2000; // under 2 seconds considered fast

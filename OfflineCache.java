@@ -13,6 +13,7 @@ public class OfflineCache {
     private List<Deck> decks;                // OfflineCache holds many Decks
     private List<CardProgress> progressRecords; // OfflineCache holds many CardProgress
     private Deck deck;
+    private Device device;
 
     // ---constructors---
     public OfflineCache(UUID id, LocalDateTime createdAt, LocalDateTime updatedAt,
@@ -36,21 +37,48 @@ public class OfflineCache {
     public List<Deck> getDecks() { return decks; }
     public List<CardProgress> getProgressRecords() { return progressRecords; }
     public Deck getDeck() { return deck; }
+    public Device getDevice() { return device; }
 
     // ---setters---
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
     public void setDeck(Deck deck) { this.deck = deck; }
+    public void setDevice(Device device) {
+        this.device = device;
+        if (device != null && !device.getOfflineCaches().contains(this)) {
+            device.addOfflineCache(this); // maintain bidirectional link
+        }
+    }
 
     // ---Association Methods---
     public void addDeck(Deck deck) {
-        decks.add(deck);
-        deck.setOfflineCache(this); // maintain bidirectional link
-        updatedAt = LocalDateTime.now();
+        if (deck != null && !decks.contains(deck)) {
+            decks.add(deck);
+            deck.setOfflineCache(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    public void removeDeck(Deck deck) {
+        if (deck != null && decks.contains(deck)) {
+            decks.remove(deck);
+            deck.setOfflineCache(null); // break back-reference
+            updatedAt = LocalDateTime.now();
+        }
     }
 
     public void addProgress(CardProgress progress) {
-        progressRecords.add(progress);
-        progress.setOfflineCache(this); // maintain bidirectional link
+        if (progress != null && !progressRecords.contains(progress)) {
+            progressRecords.add(progress);
+            progress.setOfflineCache(this); // maintain bidirectional link
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    public void clearProgressRecords() {
+        for (CardProgress progress : new ArrayList<>(progressRecords)) {
+            progress.setOfflineCache(null); // break back-reference
+        }
+        progressRecords.clear();
         updatedAt = LocalDateTime.now();
     }
 

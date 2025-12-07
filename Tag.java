@@ -49,6 +49,20 @@ public class Tag {
         }
     }
 
+    public void removeDeck(Deck deck) {
+        if (decks.contains(deck)) {
+            decks.remove(deck);
+            deck.getTags().remove(this); // break bidirectional link
+        }
+    }
+
+    public void removeCard(Card card) {
+        if (cards.contains(card)) {
+            cards.remove(card);
+            card.getTags().remove(this); // break bidirectional link
+        }
+    }
+
     // ---behavior---
     @Override
     public String toString() {

@@ -53,13 +53,26 @@ public class Folder {
             updatedAt = LocalDateTime.now();
         }
     }
-
     public void addChild(Folder child) {
         if (!children.contains(child)) {
             children.add(child);
             child.setParent(this); // back-reference
             updatedAt = LocalDateTime.now();
         }
+    }
+    public void removeChild(Folder child) {
+        if (children.contains(child)) {
+            children.remove(child);
+            child.setParent(null); // break back-reference
+            updatedAt = LocalDateTime.now();
+        }
+    }
+    public void clearChildren() {
+        for (Folder child : new ArrayList<>(children)) {
+            child.setParent(null);
+        }
+        children.clear();
+        updatedAt = LocalDateTime.now();
     }
 
     // Getters

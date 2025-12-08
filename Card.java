@@ -157,9 +157,24 @@ public class Card {
     }
 
     // ---behavior---
-    public void flip() {
+    public void printflip() {
         System.out.println("Front: " + frontText);
         System.out.println("Back: " + backText);
+    }
+    public String flip() {
+        return backText;
+    }
+
+    //---method--
+    public static Card fromText(UUID id, String rawText) {
+        String[] parts = rawText.split("Back:");
+        String front = parts[0].replace("Front:", "").trim();
+        String back = parts.length > 1 ? parts[1].trim() : "";
+        return new Card(id, front, back, LocalDateTime.now());
+    }
+    // ---convenience overload---
+    public static Card fromText(String rawText) {
+        return fromText(UUID.randomUUID(), rawText);
     }
 
     @Override

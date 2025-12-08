@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Deck {
     private UUID id;
+    private UUID ownerId;
+    private String name;
     private String title;
     private String description;
     private boolean isPublic;
@@ -12,7 +14,7 @@ public class Deck {
     private LocalDateTime updatedAt;
 
     // Associations
-    private List<Card> cards;
+    private List<Card> cards = new ArrayList<>();
     private ImportJob importJob;   // belongs to one ImportJob
     private OfflineCache offlineCache;   // belongs to one OfflineCache
     private List<Tag> tags = new ArrayList<>();
@@ -20,11 +22,12 @@ public class Deck {
     private Folder folder; // back-reference to Folder
     private User user;
 
-    // ---constructors---
-    public Deck(UUID id, String title, String description,
+    // Full constructor
+    public Deck(UUID id, UUID ownerId, String title, String description,
                 boolean isPublic, LocalDateTime createdAt,
                 LocalDateTime updatedAt, List<Card> cards) {
         this.id = id;
+        this.ownerId = ownerId;
         this.title = title;
         this.description = description;
         this.isPublic = isPublic;
@@ -33,24 +36,29 @@ public class Deck {
         this.cards = cards != null ? cards : new ArrayList<>();
     }
 
-    public Deck(UUID id, String title, String description, LocalDateTime createdAt) {
-        this(id, title, description, false, createdAt, createdAt, new ArrayList<>());
+    // Convenience constructor with createdAt
+    public Deck(UUID id, UUID ownerId, String title, String description, LocalDateTime createdAt) {
+        this(id, ownerId, title, description, false, createdAt, createdAt, new ArrayList<>());
     }
 
-    public Deck(String title, String description) {
-        this(UUID.randomUUID(), title, description, false,
+    // Convenience constructor with title/description
+    public Deck(String title, String description, UUID ownerId) {
+        this(UUID.randomUUID(), ownerId, title, description, false,
              LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>());
     }
 
-    public Deck() {
-        this(UUID.randomUUID(), null, null, false,
+    // Default constructor
+    public Deck(UUID ownerId) {
+        this(UUID.randomUUID(), ownerId, null, null, false,
              LocalDateTime.now(), LocalDateTime.now(), new ArrayList<>());
     }
 
     // ---getters---
     public UUID getId() { return id; }
+    public UUID getOwnerId() { return ownerId; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
+    public String getName() { return name; }
     public boolean isPublic() { return isPublic; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
@@ -61,7 +69,6 @@ public class Deck {
     public List<DeckShare> getShares() { return shares; }
     public Folder getFolder() { return folder; }
     public User getUser() { return user; }
-    // Convenience: collect all attempts across cards
     public List<ReviewAttempt> getAllReviewAttempts() {
         List<ReviewAttempt> allAttempts = new ArrayList<>();
         for (Card card : cards) {
@@ -96,10 +103,9 @@ public class Deck {
             offlineCache.setDeck(this);
         }
     }
-    public void setFolder(Folder folder) {
-        this.folder = folder;
-    }
+    public void setFolder(Folder folder) {this.folder = folder;}
     public void setUser(User user) { this.user = user; }
+    public void setName(String name) { this.name = name; }
 
     // ---Associations Methods---
     public void addTag(Tag tag) {
@@ -159,10 +165,18 @@ public class Deck {
         this.updatedAt = LocalDateTime.now();
     }
 
+    // ---factory + association---
+    public Card addCardFromText(String rawText) {
+        Card card = Card.fromText(UUID.randomUUID(), rawText);
+        this.addCard(card); // reuse existing association logic
+        return card;
+    }
+
     @Override
     public String toString() {
         return "Deck{" +
                 "id=" + id +
+                ", ownerId=" + ownerId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", isPublic=" + isPublic +

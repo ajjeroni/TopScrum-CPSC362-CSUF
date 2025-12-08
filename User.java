@@ -7,6 +7,7 @@ public class User {
     private UUID id;
     private String name;
     private String email;
+    private String notes;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean isPowerUser;
@@ -106,6 +107,16 @@ public class User {
              false, false, false, false,
              null,
              credentials, new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+             new ArrayList<>(), new ArrayList<>());
+    }
+
+    public User(UUID id, String name, String email) {
+        this(id, name, email,
+             LocalDateTime.now(), LocalDateTime.now(),
+             false, false, false, false,
+             null,
+             new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
              new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
              new ArrayList<>(), new ArrayList<>());
     }
@@ -240,6 +251,7 @@ public class User {
     public UUID getId() { return id; }
     public String getName() { return name; }
     public String getEmail() { return email; }
+    public String getNotes() { return notes; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public boolean isPowerUser() { return isPowerUser; }
@@ -251,6 +263,7 @@ public class User {
     // Setters
     public void setName(String name) { this.name = name; }
     public void setEmail(String email) { this.email = email; }
+    public void setNotes(String notes) { this.notes = notes; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
     public void setSettings(UISettings settings) {
         this.settings = settings;
@@ -262,6 +275,7 @@ public class User {
         this.isPowerUser = true;
         this.updatedAt = LocalDateTime.now();
     }
+    public void clearNotes() { this.notes = ""; }
 
     @Override
     public String toString() {
@@ -269,6 +283,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", notes='" + notes + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", isPowerUser=" + isPowerUser +

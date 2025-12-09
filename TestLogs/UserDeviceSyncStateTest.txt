@@ -24,3 +24,29 @@ Initial sync device: null
 After clearing all sync states:
 Device sync states count: 0
 
+=== Run at 2025-12-08T21:58:41.221484465 ===
+User devices count: 1
+Device sync states count: 2
+Initial sync version: 1
+Failed sync version: 2
+
+After removing initial sync:
+Device sync states count: 1
+Initial sync device: null
+
+After clearing all sync states:
+Device sync states count: 0
+
+=== Run at 2025-12-08T21:59:10.176061018 ===
+User devices count: 1
+Device sync states count: 2
+Initial sync version: 1
+Failed sync version: 2
+
+After removing initial sync:
+Device sync states count: 1
+Initial sync device: null
+
+After clearing all sync states:
+Device sync states count: 0
+

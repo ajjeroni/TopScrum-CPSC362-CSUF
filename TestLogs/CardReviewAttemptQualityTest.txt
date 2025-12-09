@@ -22,3 +22,27 @@ ReviewAttempts count: 2
 Remaining Attempt Quality: GOOD(4)
 Remaining Attempt Quality: EASY(5)
 
+=== Run at 2025-12-08T21:58:40.407869335 ===
+Card: comer → to eat
+ReviewAttempts count: 3
+Attempt ID: 9cda3f88-adff-46d3-bdda-40a4d537be72 | Quality: GOOD(4) | Score: 4 | Linked Card: comer
+Attempt ID: 87e029cd-d5c9-438c-8f14-abe3db6b5324 | Quality: HARD(3) | Score: 3 | Linked Card: comer
+Attempt ID: 95faa23c-e4de-4ecf-beb5-0bf7d79a1bf8 | Quality: EASY(5) | Score: 5 | Linked Card: comer
+
+After removing attempt2:
+ReviewAttempts count: 2
+Remaining Attempt Quality: GOOD(4)
+Remaining Attempt Quality: EASY(5)
+
+=== Run at 2025-12-08T21:59:09.402336019 ===
+Card: comer → to eat
+ReviewAttempts count: 3
+Attempt ID: 88c9ae09-74a1-41d6-9935-649bedcc1984 | Quality: GOOD(4) | Score: 4 | Linked Card: comer
+Attempt ID: 6245ec8a-9c82-4a42-b8cc-58d83c85d0a9 | Quality: HARD(3) | Score: 3 | Linked Card: comer
+Attempt ID: 1b859887-f367-4f71-b9d7-f59596e7534a | Quality: EASY(5) | Score: 5 | Linked Card: comer
+
+After removing attempt2:
+ReviewAttempts count: 2
+Remaining Attempt Quality: GOOD(4)
+Remaining Attempt Quality: EASY(5)
+

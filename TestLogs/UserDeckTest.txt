@@ -6,3 +6,11 @@ Deck → User: true
 User → Deck: true
 Deck → User: true
 
+=== Run at 2025-12-08T21:58:41.023742541 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at UserDeckTest.main(UserDeckTest.java:4)
+
+=== Run at 2025-12-08T21:59:09.982162808 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at UserDeckTest.main(UserDeckTest.java:4)
+

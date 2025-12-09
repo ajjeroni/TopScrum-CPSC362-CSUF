@@ -34,3 +34,11 @@ After detaching Sean:
 Deck shares count: 0
 Sean shares count: 0
 
+=== Run at 2025-12-08T21:58:40.545267327 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at DeckDeckShareUserTest.main(DeckDeckShareUserTest.java:6)
+
+=== Run at 2025-12-08T21:59:09.509422875 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at DeckDeckShareUserTest.main(DeckDeckShareUserTest.java:6)
+

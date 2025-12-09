@@ -34,3 +34,11 @@ After detaching from user:
 User jobs count: 0
 Job user: null
 
+=== Run at 2025-12-08T21:58:41.158101307 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at UserImportJobDeckTest.main(UserImportJobDeckTest.java:11)
+
+=== Run at 2025-12-08T21:59:10.113005364 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at UserImportJobDeckTest.main(UserImportJobDeckTest.java:11)
+

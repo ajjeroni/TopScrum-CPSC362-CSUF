@@ -62,33 +62,43 @@ public class UI extends Application {
 
 	for (User u : users) {
 	    for (Deck d : decks) {
-		if (d.getOwnerId().equals(u.getId())) {
-		    u.addDeck(d);
-		    d.setUser(u); // maintain back-reference
-		}
+				if (d.getOwnerId().equals(u.getId())) {
+						u.addDeck(d);
+						d.setUser(u); // maintain back-reference
+				}
 	    }
 	}
-        // --- Card editor areas ---
-		frontArea = new TextArea();
-		frontArea.setPromptText("Front text...");
+	// --- Re‑attach cards to decks ---
+	List<Card> cards = cardRepo.findAllCards();
+	for (Deck d : decks) {
+			for (Card c : cards) {
+					if (c.getDeckId() != null && c.getDeckId().equals(d.getId())) {
+							d.addCard(c);
+							c.setDeck(d); // maintain back-reference
+					}
+			}
+	}
+	// --- Card editor areas ---
+	frontArea = new TextArea();
+	frontArea.setPromptText("Front text...");
 
-		backArea = new TextArea();
-		backArea.setPromptText("Back text...");
+	backArea = new TextArea();
+	backArea.setPromptText("Back text...");
 
-		VBox cardEditor = new VBox(10, frontArea, backArea);
+	VBox cardEditor = new VBox(10, frontArea, backArea);
 
-        // --- Buttons ---
-        Button userButton   = new Button("Users");
-        Button deckButton   = new Button("Decks");
-        Button cardButton   = new Button("Cards");
-        Button folderButton = new Button("Folders");
-        Button reviewButton = new Button("Review");
+	// --- Buttons ---
+	Button userButton   = new Button("Users");
+	Button deckButton   = new Button("Decks");
+	Button cardButton   = new Button("Cards");
+	Button folderButton = new Button("Folders");
+	Button reviewButton = new Button("Review");
 	Label reviewStatus = new Label();
 	reviewStatus.setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-font-style: italic;");
-        Button saveCardButton = new Button("Save Card");
+	Button saveCardButton = new Button("Save Card");
 	Button removeCardButton = new Button("Remove Card");
 
-        VBox reviewBox = new VBox(5, reviewButton, reviewStatus);
+	VBox reviewBox = new VBox(5, reviewButton, reviewStatus);
 
 	VBox buttonColumn = new VBox(10,
 	    userButton, deckButton, cardButton, folderButton, reviewBox);
@@ -163,6 +173,14 @@ public class UI extends Application {
 
 		if (found != null) {
 		    currentUser = found;
+		    // Re‑attach decks for this user
+				List<Deck> allDecks = deckRepo.findAllDecks();
+				for (Deck d : allDecks) {
+						if (d.getOwnerId().equals(currentUser.getId())) {
+								currentUser.addDeck(d);
+								d.setUser(currentUser);
+						}
+				}
 		    new Alert(Alert.AlertType.INFORMATION,
 			"User ready: " + currentUser.getName()).showAndWait();
 		} else {
@@ -267,9 +285,10 @@ public class UI extends Application {
 	    }
 	    if (currentDeck == null) return;
 
-	    // Always create a new card
-	    Card c = new Card("New Card", "");
-	    currentDeck.addCard(c);
+	    // Always create a new card tied to the current deck
+			Card c = new Card(currentDeck.getId(), "New Card", "");
+			currentDeck.addCard(c);
+			c.setDeck(currentDeck); // maintain back-reference
 	    currentCard = c;
 	    currentCardIndex = currentDeck.getCards().size() - 1;
 

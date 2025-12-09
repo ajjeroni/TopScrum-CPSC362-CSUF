@@ -24,3 +24,11 @@ Card: hablar → to speak
 Attachment URL: audio/hablar.mp3
 Example sentence: Yo quiero hablar contigo.
 
+=== Run at 2025-12-08T21:58:40.879021708 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at UserFolderDeckCardTest.main(UserFolderDeckCardTest.java:6)
+
+=== Run at 2025-12-08T21:59:09.841512185 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at UserFolderDeckCardTest.main(UserFolderDeckCardTest.java:6)
+

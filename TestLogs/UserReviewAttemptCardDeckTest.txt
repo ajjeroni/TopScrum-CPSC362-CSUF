@@ -24,3 +24,11 @@ After detaching attempt2:
 User attempts: 0
 Card2 attempts: 0
 
+=== Run at 2025-12-08T21:58:40.817344367 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at UserReviewAttemptCardDeckTest.main(UserReviewAttemptCardDeckTest.java:4)
+
+=== Run at 2025-12-08T21:59:09.773592915 ===
+Exception in thread "main" java.lang.NoSuchMethodError: 'void Deck.<init>(java.lang.String, java.lang.String)'
+	at UserReviewAttemptCardDeckTest.main(UserReviewAttemptCardDeckTest.java:4)
+

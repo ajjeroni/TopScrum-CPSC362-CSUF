@@ -1,35 +1,43 @@
-import java.time.LocalDateTime;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 public class LocalRepositoryTest {
-    public static void main(String[] args) {
-        LocalRepository repo = new LocalRepository();
+    public static void main(String[] args) throws Exception {
+        // --- User save/recall ---
+        LocalRepository userRepo = new LocalRepository(
+            Paths.get(System.getProperty("user.home"), ".domainTester", "users.txt")
+        );
+        User u = new User("Sean", "sean@example.com");
+        userRepo.save("user:" + u.getId(), u.toString());
+        userRepo.saveAllToFile();
 
-        // --- Create a User and save it ---
-        String userId = UUID.randomUUID().toString();
-        String userKey = "user:" + userId;
-        String userValue = "User{id=" + userId
-                + ", name='Sean', email='sean@example.com', createdAt=" + LocalDateTime.now()
-                + ", updatedAt=" + LocalDateTime.now()
-                + ", isPowerUser=true}";
+        userRepo.loadAllFromFile();
+        List<User> users = userRepo.findAllUsers();
+        System.out.println("Users recalled: " + users);
 
-        repo.save(userKey, userValue);
-        System.out.println("Saved user -> " + userValue);
+        // --- Deck save/recall ---
+        LocalRepository deckRepo = new LocalRepository(
+            Paths.get(System.getProperty("user.home"), ".domainTester", "decks.txt")
+        );
+        Deck d = new Deck("Algorithms", "Study deck", u.getId());
+        deckRepo.save("deck:" + d.getId(), d.toString());
+        deckRepo.saveAllToFile();
 
-        try {
-            // Persist to file
-            repo.saveAllToFile();
-            System.out.println("Saved all to file.");
+        deckRepo.loadAllFromFile();
+        List<Deck> decks = deckRepo.findAllDecks();
+        System.out.println("Decks recalled: " + decks);
 
-            // Reload into a fresh repository
-            LocalRepository reloaded = new LocalRepository();
-            reloaded.loadAllFromFile();
+        // --- Card save/recall ---
+        LocalRepository cardRepo = new LocalRepository(
+            Paths.get(System.getProperty("user.home"), ".domainTester", "cards.txt")
+        );
+        Card c = new Card("Front text", "Back text");
+        cardRepo.save("card:" + c.getId(), c.toString());
+        cardRepo.saveAllToFile();
 
-            // Recall the user
-            String recalled = reloaded.find(userKey);
-            System.out.println("Recalled user -> " + recalled);
-        } catch (Exception ex) {
-            System.err.println("Persistence test failed: " + ex.getMessage());
-        }
+        cardRepo.loadAllFromFile();
+        List<Card> cards = cardRepo.findAllCards();
+        System.out.println("Cards recalled: " + cards);
     }
 }

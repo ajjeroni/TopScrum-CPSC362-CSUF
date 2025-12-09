@@ -26,3 +26,31 @@ Personal parent: null
 After clearing all children:
 Root children: 0
 
+=== Run at 2025-12-08T21:58:41.487045579 ===
+Root folder: Root
+ - Subfolder: Projects
+ - Subfolder: Personal
+Projects children: 1
+JavaProject parent: Projects
+
+After removing 'Personal':
+Root children: 1
+Personal parent: null
+
+After clearing all children:
+Root children: 0
+
+=== Run at 2025-12-08T21:59:10.446906954 ===
+Root folder: Root
+ - Subfolder: Projects
+ - Subfolder: Personal
+Projects children: 1
+JavaProject parent: Projects
+
+After removing 'Personal':
+Root children: 1
+Personal parent: null
+
+After clearing all children:
+Root children: 0
+

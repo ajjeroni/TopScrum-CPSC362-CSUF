@@ -1,9 +1,12 @@
+import java.util.UUID;
+
 public class DeckDeckShareUserTest {
     public static void main(String[] args) {
         // Create users and a deck
         User sean = new User("Sean", "sean@example.com");
         User alex = new User("Alex", "alex@example.com");
-        Deck spanishDeck = new Deck("Spanish Basics", "Intro verbs");
+		UUID testUUID = UUID.randomUUID();
+        Deck spanishDeck = new Deck("Spanish Basics", "Intro verbs", testUUID);
 
         // Create shares with different roles
         DeckShare ownerShare = new DeckShare(ShareRole.OWNER, spanishDeck, sean);

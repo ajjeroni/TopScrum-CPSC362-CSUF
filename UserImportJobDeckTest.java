@@ -1,3 +1,5 @@
+import java.util.UUID;
+
 public class UserImportJobDeckTest {
     public static void main(String[] args) {
         // Create a user
@@ -8,8 +10,10 @@ public class UserImportJobDeckTest {
         job.attachTo(sean);
 
         // Create decks produced by the import
-        Deck spanishDeck = new Deck("Spanish Basics", "Intro verbs");
-        Deck frenchDeck = new Deck("French Basics", "Intro verbs");
+		UUID testUUID = UUID.randomUUID();
+        Deck spanishDeck = new Deck("Spanish Basics", "Intro verbs", testUUID);
+		UUID testUUID2 = UUID.randomUUID();
+        Deck frenchDeck = new Deck("French Basics", "Intro verbs", testUUID2);
 
         // Attach decks to the job
         job.addDeck(spanishDeck);

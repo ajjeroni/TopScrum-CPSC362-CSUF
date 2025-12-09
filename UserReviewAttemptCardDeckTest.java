@@ -1,7 +1,10 @@
+import java.util.UUID;
+
 public class UserReviewAttemptCardDeckTest {
     public static void main(String[] args) {
         User user = new User("Sean", "sean@example.com");
-        Deck deck = new Deck("Spanish Basics", "Intro verbs");
+		UUID testUUID = UUID.randomUUID();
+        Deck deck = new Deck("Spanish Basics", "Intro verbs", testUUID);
 
         Card card1 = new Card("comer", "to eat");
         Card card2 = new Card("beber", "to drink");

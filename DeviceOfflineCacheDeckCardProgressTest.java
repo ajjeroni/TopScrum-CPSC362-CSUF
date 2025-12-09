@@ -1,3 +1,5 @@
+import java.util.UUID;
+
 public class DeviceOfflineCacheDeckCardProgressTest {
     public static void main(String[] args) {
         // --- Test Device ↔ OfflineCache ↔ Deck ---
@@ -5,7 +7,8 @@ public class DeviceOfflineCacheDeckCardProgressTest {
         OfflineCache cache = new OfflineCache();
         cache.setDevice(phone); // simulate association
 
-        Deck vocabDeck = new Deck("Spanish Vocabulary", "Basic words");
+		UUID testUUID = UUID.randomUUID();
+        Deck vocabDeck = new Deck("Spanish Vocabulary", "Basic words", testUUID);
         cache.addDeck(vocabDeck);
 
         System.out.println("Cache decks count: " + cache.getDecks().size()); // expect 1

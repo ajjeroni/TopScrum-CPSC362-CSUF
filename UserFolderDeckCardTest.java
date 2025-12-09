@@ -1,9 +1,12 @@
+import java.util.UUID;
+
 public class UserFolderDeckCardTest {
     public static void main(String[] args) {
         // Create root objects
         User user = new User("Sean", "sean@example.com");
         Folder folder = new Folder("Spanish Vocabulary");
-        Deck deck = new Deck("Verbs", "Common Spanish verbs");
+		UUID testUUID = UUID.randomUUID();
+        Deck deck = new Deck("Verbs", "Common Spanish verbs", testUUID);
         Card card = new Card("hablar", "to speak");
         Attachment attachment = new Attachment(AttachmentType.AUDIO, "audio/hablar.mp3");
         ExampleSentence example = new ExampleSentence("Yo quiero hablar contigo.");
